@@ -9,7 +9,7 @@ tilemap = (100, 100, 5, 5)
 batch = py.graphics.Batch()
 shapes = []
 
-@window.event 
+@window.event
 def on_key_press(symbol, modifier):
     if symbol == key.A:
         for i in shapes:
@@ -28,8 +28,16 @@ def on_key_press(symbol, modifier):
         r = ran.choice(shapes)
         r.delete()
 
+def matrice_creation(dimension_x, dimension_y):
+    """Fonction creant une matrice"""
+    matrice = []
+    for i in range(dimension_x):
+        matrice.append([])
+        for y in range(dimension_y):
+            pass
+            
 
-@window.event()
+@window.event
 def on_draw():
     window.clear()
     batch.draw()
