@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import pyglet
 
 from pyglet.gl import GL_NEAREST
-import random
+import matrix_manager
 
 @dataclass
 class World:
@@ -13,12 +13,8 @@ class World:
     world_matrix: list[list] = dc.field(default_factory=list[list])
     batch: pyglet.graphics.Batch = pyglet.graphics.Batch()
 
-    @staticmethod
-    def create_matrix(dim: tuple[int, int] | list[int, int]) -> list:
-        return [[None for j in range(dim[0])] for i in range(dim[1])]
-
     def __post_init__(self):
-        self.world_matrix = self.create_matrix(self.dimensions)
+        self.world_matrix = matrix_manager.create_matrix(self.dimensions)
 
     def __str__(self):
         return '\n'.join([str(i) for i in self.world_matrix])
@@ -91,15 +87,13 @@ if __name__ == "__main__":
     window = pyglet.window.Window()
     window.set_fullscreen(True)
     window.activate()
+
     from pyglet.window import key
-    from pyglet.window import mouse
     from key_handler import KeyHandler
 
     keys = KeyHandler(window)
 
     w = World(dimensions=(10, 10))
-    w.generate_map_test()
-
 
     @window.event
     def on_draw():
@@ -109,14 +103,11 @@ if __name__ == "__main__":
 
     def update(dt):
         global w
-        print('update')
-        print(w.position)
         if keys.key_just_pressed(key.UP):
             w.position[1] += 10
         if keys.key_just_pressed(key.DOWN):
             w.position[1] -= 10
 
     pyglet.clock.schedule_interval(update, 1 / 60.)
-
 
     pyglet.app.run()
