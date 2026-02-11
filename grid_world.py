@@ -33,26 +33,6 @@ class World:
         for k, value in kwargs.items():
             setattr(c, k, value)
 
-    def generate_map_test(self):
-        for y in range(self.dimensions[1]):
-            for x in range(self.dimensions[0]):
-                alternate = (x+y)%2
-                c = self.TextureSquare(
-                    type='fill',
-                    position=(x, y),
-                    img_size=80,
-                    image=pyglet.image.load('tilemap_pink/extern_45.png'),
-                    batch=self.batch,
-                )
-                self.world_matrix[y][x] = c
-
-    def test_change(self, sq_l = 3):
-        rx = random.randint(0, self.dimensions[0] - sq_l - 5)
-        ry = random.randint(0, self.dimensions[1] - sq_l - 5)
-        for y in range(sq_l):
-            for x in range(sq_l):
-                self.change_square(rx+x, ry+y, color=(255, 0, 0))
-
     @dataclass
     class Square:
         type: str
@@ -137,5 +117,6 @@ if __name__ == "__main__":
             w.position[1] -= 10
 
     pyglet.clock.schedule_interval(update, 1 / 60.)
+
 
     pyglet.app.run()
