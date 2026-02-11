@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import pyglet
 
 from pyglet.gl import GL_NEAREST
-import random
+import matrix_manager
 
 @dataclass
 class World:
@@ -13,12 +13,8 @@ class World:
     world_matrix: list[list] = dc.field(default_factory=list[list])
     batch: pyglet.graphics.Batch = pyglet.graphics.Batch()
 
-    @staticmethod
-    def create_matrix(dim: tuple[int, int] | list[int, int]) -> list:
-        return [[None for j in range(dim[0])] for i in range(dim[1])]
-
     def __post_init__(self):
-        self.world_matrix = self.create_matrix(self.dimensions)
+        self.world_matrix = matrix_manager.create_matrix(self.dimensions)
 
     def __str__(self):
         return '\n'.join([str(i) for i in self.world_matrix])
@@ -32,26 +28,6 @@ class World:
         c = self.world_matrix[y][x]
         for k, value in kwargs.items():
             setattr(c, k, value)
-
-    def generate_map_test(self):
-        for y in range(self.dimensions[1]):
-            for x in range(self.dimensions[0]):
-                alternate = (x+y)%2
-                c = self.TextureSquare(
-                    type='fill',
-                    position=(x, y),
-                    img_size=80,
-                    image=pyglet.image.load('tilemap_pink/extern_45.png'),
-                    batch=self.batch,
-                )
-                self.world_matrix[y][x] = c
-
-    def test_change(self, sq_l = 3):
-        rx = random.randint(0, self.dimensions[0] - sq_l - 5)
-        ry = random.randint(0, self.dimensions[1] - sq_l - 5)
-        for y in range(sq_l):
-            for x in range(sq_l):
-                self.change_square(rx+x, ry+y, color=(255, 0, 0))
 
     @dataclass
     class Square:
@@ -111,15 +87,13 @@ if __name__ == "__main__":
     window = pyglet.window.Window()
     window.set_fullscreen(True)
     window.activate()
+
     from pyglet.window import key
-    from pyglet.window import mouse
     from key_handler import KeyHandler
 
     keys = KeyHandler(window)
 
     w = World(dimensions=(10, 10))
-    w.generate_map_test()
-
 
     @window.event
     def on_draw():
@@ -129,8 +103,6 @@ if __name__ == "__main__":
 
     def update(dt):
         global w
-        print('update')
-        print(w.position)
         if keys.key_just_pressed(key.UP):
             w.position[1] += 10
         if keys.key_just_pressed(key.DOWN):
