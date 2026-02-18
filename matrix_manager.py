@@ -1,18 +1,18 @@
 """
 Gère plusieurs opérations sur des matrcies
 
-Autreur: Adrien Buschbeck
+Auteur: Adrien Buschbeck, Albert ...
 """
+
 import itertools as it
 
 
-def create_matrix(dim: tuple[int, int] | list[int, int]) -> list:
-    """retourne une matrice
+def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -> list:
+    """retourne une matrice où chaque cellule est remplie par element
     dim[0] --> axe -y
     dim[1] --> axe x
     """
-    liste = [0,1,2,3,4,5,6,7,8,9,10,11]
-    return [[ j + i**2 for j in range(dim[1])] for i in range(dim[0])]
+    return [[element for j in range(dim[1])] for i in range(dim[0])]
 
 
 def up(matrix, cell):
@@ -55,6 +55,7 @@ def left(matrix, cell):
     if cell[1] == 0:
         return None
     return matrix[cell[0]][cell[1] - 1]
+
 
 if __name__ == "__main__":   
     a = create_matrix((4, 4))
