@@ -5,7 +5,7 @@ Auteur: Adrien Buschbeck, Albert ...
 """
 
 import itertools as it
-
+import random as ran
 
 def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -> list:
     """retourne une matrice où chaque cellule est remplie par element
@@ -56,6 +56,11 @@ def left(matrix, cell):
         return None
     return matrix[cell[0]][cell[1] - 1]
 
+def random_cell(matrix):
+    """Retourne une cellule aléatoire d'une matrice"""
+    column = ran.randint(0, len(matrix) - 1)
+    row = ran.randint(0, len(matrix[len(matrix) - 1]) - 1)
+    return matrix[column][row]
 
 if __name__ == "__main__":   
     a = create_matrix((4, 4))
