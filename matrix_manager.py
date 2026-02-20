@@ -56,11 +56,27 @@ def left(matrix, cell):
         return None
     return matrix[cell[0]][cell[1] - 1]
 
-def random_cell(matrix):
-    """Retourne une cellule aléatoire d'une matrice"""
-    column = ran.randint(0, len(matrix) - 1)
-    row = ran.randint(0, len(matrix[len(matrix) - 1]) - 1)
-    return matrix[column][row]
+def random_cell(matrix, coordinate = None):
+    """Retourne la valeur et la position aléatoire
+        d'une cellule cellule aléatoire d'une matrice
+        
+        coordinate[0] --> axe -y
+        coordinate[1] --> axe x
+    """
+    coords = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
+    
+    def ran_cell(matrix, coordinates = coords):
+        position = ran.choice(coordinates)
+        column = position[0]
+        row = position[1]
+        cell = matrix[column][row]
+        return ((column, row), cell)
+    
+    if coordinate == None:
+        return ran_cell(matrix)
+    else:
+        return ran_cell(matrix, coordinate)
+    
 
 if __name__ == "__main__":   
     a = create_matrix((4, 4))

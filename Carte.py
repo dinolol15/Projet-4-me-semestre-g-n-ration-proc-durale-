@@ -13,20 +13,14 @@ def w_f_c_simplified(matrix):
     Les éléments de la matrix doivent être des listes
     """
     
+    coordinates = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
     test_value = len(matrix)*len(matrix[len(matrix) - 1])
-    error = test_value*100
     
-    while (error > 0 and test_value != 0):
-        column = ran.randint(0, len(matrix) - 1)
-        row = ran.randint(0, len(matrix[len(matrix) - 1]) - 1)
-        cell = matrix[column][row]
-        try:
-            len(cell)
-        except TypeError:
-            error -= 1
-            continue
+    while test_value != 0:
+        cell = mm.random_cell(matrix, coordinates)
+        coordinates.remove((cell[0][0], cell[0][1]))
         #mettre respect condition ici (peut-être try except)
-        matrix[column][row] = ran.choice(cell)
+        matrix[cell[0][0]][cell[0][1]] = ran.choice(cell[1])
         test_value -= 1
     return matrix
 
@@ -37,5 +31,5 @@ def condition():
 
 
 if __name__ == "__main__":
-    a = w_f_c_simplified(mm.create_matrix((20, 20), [1, 2, 3, 4]))
+    a = w_f_c_simplified(mm.create_matrix((10, 10), [1, 2, 3, 4]))
     print('\n'.join([str(i) for i in a]))
