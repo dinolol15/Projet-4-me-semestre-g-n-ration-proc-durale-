@@ -25,9 +25,7 @@ def w_f_c_simplified(matrix):
             print("Contradiction atteinte")
             break
         #mettre respect condition ici
-        c_cell = Counter(cell[1])
-        list_cell = list(c_cell.elements())
-        matrix[cell[0][0]][cell[0][1]] = ran.choice(list_cell)
+        matrix[cell[0][0]][cell[0][1]] = ran.choice(list(Counter(cell[1]).elements()))
         test_value -= 1
     return matrix
 
@@ -41,8 +39,13 @@ if __name__ == "__main__":
     Plain = Tile("Plain", 1, 1, (124, 252, 0), {"Sea": 0,})
     Mountain = Tile("Mountain", 0.25, 10, (139, 137, 137), {"Sea": 0,})
     Forest = Tile("Forest", 1.25, 5, (34, 139, 34), {"Sea": 0, "Desert" : 0})
-    Sea = Tile("Sea", 0, 10000, (28, 107, 160), {"Plain": 0, "Mountain" : 0, "Forest" : 0, "Desert" : 0})
+    Sea = Tile("Sea",
+               0, 10000,
+               (28, 107, 160),
+               {"Plain": 0, "Mountain" : 0, "Forest" : 0, "Desert" : 0})
     River = Tile("River", 0, 3, (70, 130, 180), {})
     Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), {"Sea": 0, "Forest" : 0})
-    a = w_f_c_simplified(mm.create_matrix((10, 10), {"P":100, "M":1, "F":1, "D":1, "S":1, "R":1})) #{Plain:1, Mountain:1, Forest:1, Desert:1, Sea:1, River:1}
+    
+    
+    a = w_f_c_simplified(mm.create_matrix((10, 10), {"P":1, "M":1, "F":1, "D":1, "S":1, "R":1})) #{Plain:1, Mountain:1, Forest:1, Desert:1, Sea:1, River:1}
     print('\n'.join([str(i) for i in a]))
