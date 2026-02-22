@@ -80,7 +80,7 @@ class World:
             self.__sq.x = self.position[0] * self.img_size + world_pos[0]
             self.__sq.y = self.position[1] * self.img_size + world_pos[1]
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class Tile:
     """Classe représentant les différents types de terrains"""
     
@@ -88,7 +88,7 @@ class Tile:
     wealth: float
     wildness: float
     Color: tuple[int, int, int] = dc.field(default_factory=tuple[int, int, int])
-    wfc_coeficient: dict = dc.field(default_factory=dict) # {str:int}
+    wfc_coeficient: tuple = dc.field(default_factory=tuple) # {str:int}
 
 if __name__ == "__main__":
     window = pyglet.window.Window()

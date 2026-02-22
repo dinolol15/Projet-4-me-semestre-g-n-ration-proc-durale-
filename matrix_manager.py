@@ -15,46 +15,46 @@ def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -
     return [[element for j in range(dim[1])] for i in range(dim[0])]
 
 
-def up(matrix, cell):
-    """Retourne la cellule en haut d'une cellule
-    cell[0] --> axe -y
-    cell[1] --> axe x
+def up(matrix, position):
+    """Retourne la position et la valeur d'une cellule en haut d'une cellule
+    position[0] --> axe -y
+    position[1] --> axe x
     """
-    if cell[0] == 0:
+    if position[0] == 0:
         return None 
-    return matrix[cell[0] - 1][cell[1]]
+    return ((position[0] - 1, position[1]) , matrix[position[0] - 1][position[1]])
     
 
 
-def down(matrix, cell):
-    """Retourne la cellule en bas d'une cellule
-    cell[0] --> axe -y
-    cell[1] --> axe x
+def down(matrix, position):
+    """Retourne la position et la valeur d'une cellule en bas d'une cellule
+    position[0] --> axe -y
+    position[1] --> axe x
     """
-    if cell[0] >= len(matrix) - 1 :
+    if position[0] >= len(matrix) - 1 :
         return None
-    return matrix[cell[0] + 1][cell[1]]
+    return ((position[0] + 1, position[1]), matrix[position[0] + 1][position[1]])
     
     
     
-def right(matrix, cell):
-    """"Retourne la cellule à droite d'une cellule
-    cell[0] --> axe -y
-    cell[1] --> axe x
+def right(matrix, position):
+    """"Retourne la position et la valeur d'une cellule à droite d'une cellule
+    position[0] --> axe -y
+    position[1] --> axe x
     """
-    if cell[1] == len(matrix[cell[0]]) - 1:
+    if position[1] == len(matrix[position[0]]) - 1:
         return None 
-    return matrix[cell[0]][cell[1] + 1]
+    return ((position[0], position[1] + 1), matrix[position[0]][position[1] + 1])
     
     
-def left(matrix, cell):
-    """Retourne la cellule à gauche d'une cellule
-    cell[0] --> axe -y
-    cell[1] --> axe x
+def left(matrix, position):
+    """Retourne la position et la valeur d'une cellule à gauche d'une cellule
+    position[0] --> axe -y
+    position[1] --> axe x
     """
-    if cell[1] == 0:
+    if position[1] == 0:
         return None
-    return matrix[cell[0]][cell[1] - 1]
+    return ((position[0], position[1] - 1), matrix[position[0]][position[1] - 1])
 
 def random_cell(matrix, coordinate = None):
     """Retourne la valeur et la position aléatoire
