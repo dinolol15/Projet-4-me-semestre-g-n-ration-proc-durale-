@@ -30,7 +30,7 @@ def w_f_c_simplified(matrix):
         test_value -= 1
     
             
-    return [[j.Name[0] for j in i] for i in matrix]
+    return matrix
 
 
 def condition(matrix, cell):
@@ -56,20 +56,20 @@ def condition(matrix, cell):
         except TypeError:
             continue
         
-        for i in cell.wfc_coeficient:
-            matrix[cell1[0][0]][cell1[0][1]] = [j for j in list(Counter(cell1[1])) if j.Name != i]
+        for print in cell.wfc_coeficient: # Please Mister have Mercy
+            matrix[cell1[0][0]][cell1[0][1]] = {tile: count for tile, count in cell1[1].items() if tile.Name not in print}
             
-        
+            
 
 
 if __name__ == "__main__":
     #Base est pour que le tuple en soit vraiment u et pas un str
-    Plain = Tile("Plain", 1, 1, (124, 252, 0), ("Sea", "Base"))
-    Mountain = Tile("Mountain", 0.25, 10, (139, 137, 137), ("Sea", "Base"))
+    Plain = Tile("Plain", 1, 1, (124, 252, 0), ("Sea",))
+    Mountain = Tile("Mountain", 0.25, 10, (139, 137, 137), ("Sea",))
     Forest = Tile("Forest", 1.25, 5, (34, 139, 34), ("Sea", "Desert"))
     Sea = Tile("Sea", 0, 10000, (28, 107, 160), ("Plain", "Mountain", "Forest", "Desert"))
-    River = Tile("River", 0, 3, (70, 130, 180), ("Base"))
+    River = Tile("River", 0, 3, (70, 130, 180), ())
     Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), ("Sea", "Forest"))
     
-    a = w_f_c_simplified(mm.create_matrix((20, 20), {Plain:3, Mountain:1, Forest:2, Desert:2, Sea:1, River:3})) #{Plain:1, Mountain:1, Forest:1, Desert:1, Sea:1, River:1}
+    a = w_f_c_simplified(mm.create_matrix((10, 10), {Plain:3, Mountain:1, Forest:2, Desert:2, Sea:1, River:3})) #{Plain:1, Mountain:1, Forest:1, Desert:1, Sea:1, River:1}
     print('\n'.join([str(i) for i in a]))

@@ -89,6 +89,9 @@ class Tile:
     wildness: float
     Color: tuple[int, int, int] = dc.field(default_factory=tuple[int, int, int])
     wfc_coeficient: tuple = dc.field(default_factory=tuple) # {str:int}
+    
+    def __repr__(self):
+        return self.Name[0]
 
 if __name__ == "__main__":
     window = pyglet.window.Window()
