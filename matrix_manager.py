@@ -4,8 +4,10 @@ Gère plusieurs opérations sur des matrcies
 Auteur: Adrien Buschbeck, Albert ...
 """
 
+from collections import Counter
 import itertools as it
 import random as ran
+
 
 def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -> list:
     """retourne une matrice où chaque cellule est remplie par element
@@ -76,7 +78,36 @@ def random_cell(matrix, coordinate = None):
         return ran_cell(matrix)
     else:
         return ran_cell(matrix, coordinate)
+
+
+def lobject_cell(matrix, coordinate = None):
+    """Retourne la valeur et la position aléatoire
+        de la cellule avec le moins d'éléments dans la matrice
+        
+        coordinate[0] --> axe -y
+        coordinate[1] --> axe x
+    """
+    coords = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
     
+    def ob_cell(matrix, coordinates = coords):
+        cell_min = [((coordinates[0][0], coordinates[0][1]), matrix[coordinates[0][0]][coordinates[0][1]])]
+        for c in coordinates:
+            column = c[0]
+            row = c[1]
+            cell = matrix[column][row]
+            if len(list(Counter(cell).elements())) == len(list(Counter(matrix[cell_min[0][0][0]][cell_min[0][0][1]]).elements())):
+                cell_min.append(((column, row), matrix[column][row]))
+            
+            elif len(list(Counter(cell).elements())) < len(list(Counter(matrix[cell_min[0][0][0]][cell_min[0][0][1]]).elements())):
+                cell_min = [((c[0], c[1]), cell)]
+        
+        return ran.choice(cell_min)
+    
+    if coordinate == None:
+        return ob_cell(matrix)
+    else:
+        return ob_cell(matrix, coordinate)
+
 
 if __name__ == "__main__":   
     a = create_matrix((4, 4))
