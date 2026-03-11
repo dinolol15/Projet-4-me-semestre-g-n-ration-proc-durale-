@@ -4,9 +4,10 @@ Programme créant une carte
 Auteur: Adrien Buschbeck
 """
 
+import dataclasses as dc
+from dataclasses import dataclass
 import random as ran
 import matrix_manager as mm
-from grid_world import Tile
 from collections import Counter
 
 def w_f_c_simplified(matrix):
@@ -56,20 +57,45 @@ def condition(matrix, cell):
         except TypeError:
             continue
         
-        matrix[cell1[0][0]][cell1[0][1]] = {tile: count for tile, count in cell1[1].items() if tile.Name not in cell.wfc_coeficient}
+        matrix[cell1[0][0]][cell1[0][1]] = {tile: count for tile, count in cell1[1].items() if tile.Name not in cell.wfc_delete}
+        
+        
+        #for tile, count in cell1[1].items():
+         #   if tile.Name in cell.wfc_coefficient.keys():
+                
+          #      pass
+                #todo
+                # 0 = suppression, sinon + ou -, si <0, ==0
+                
+        
             
-            
-            
+@dataclass(eq=True, frozen=True)
+class Tile:
+    """Classe représentant les différents types de terrains"""
+    
+    Name: str
+    wealth: float
+    wildness: float
+    Color: tuple[int, int, int] = dc.field(default_factory=tuple[int, int, int])
+    wfc_delete: tuple = dc.field(default_factory=tuple) # {str:int}
+    #wfc_coefficient: dict = dc.field(default_factory=dict)
+    
+    def __repr__(self):
+        return self.Name[0]
+    
+Plain = Tile("Plain", 1, 1, (124, 252, 0), ("Sea", "Base"), ) #{"Sea" : 0, "Plain" : 2, "Forest" : 1}
+Mountain = Tile("Mountain", 0.25, 10, (139, 137, 137), ("Sea", "Base"), ) #{"Sea":0, "Mountain" : 1,}
+Forest = Tile("Forest", 1.25, 5, (34, 139, 34), ("Sea", "Desert"),) # {"Sea":0, "Mountain" : 1, "Plain" : 1, "Forest" : 2} 
+Sea = Tile("Sea", 0, 10000, (28, 107, 160), ("Plain", "Mountain", "Forest", "Desert")) #, {"Plain" : 0, "Mountain" : 0, "Forest" : 0, "Desert" : 0, "Sea" : 1}
+River = Tile("River", 0, 3, (70, 130, 180), (), ) #{"River" : 1,}
+Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), ("Sea", "Forest"))# {"Sea" : 0, "Forest" : 0, "Desert" : 2,}          
 
 
 if __name__ == "__main__":
     #Base est pour que le tuple en soit vraiment u et pas un str
-    Plain = Tile("Plain", 1, 1, (124, 252, 0), ("Sea", "Base"))
-    Mountain = Tile("Mountain", 0.25, 10, (139, 137, 137), ("Sea", "Base"))
-    Forest = Tile("Forest", 1.25, 5, (34, 139, 34), ("Sea", "Desert"))
-    Sea = Tile("Sea", 0, 10000, (28, 107, 160), ("Plain", "Mountain", "Forest", "Desert"))
-    River = Tile("River", 0, 3, (70, 130, 180), ())
-    Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), ("Sea", "Forest"))
     
-    a = w_f_c_simplified(mm.create_matrix((10, 10), {Plain:3, Mountain:1, Forest:2, Desert:2, Sea:1, River:2})) #{Plain:1, Mountain:1, Forest:1, Desert:1, Sea:1, River:1}
+    
+    a = w_f_c_simplified(mm.create_matrix((20, 20), {Plain:3, Mountain:1, Forest:2, Desert:2, Sea:1, River:2})) #{Plain:1, Mountain:1, Forest:1, Desert:1, Sea:1, River:1}
+    
+    
     print('\n'.join([str(i) for i in a]))
