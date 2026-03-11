@@ -6,7 +6,7 @@ from pyglet.window import key, mouse
 
 
 window = py.window.Window()
-#window.set_fullscreen(True)
+window.set_fullscreen(True)
 
 dimension = (5, 5)
 batch = py.graphics.Batch()
@@ -17,7 +17,7 @@ shapes = []
 def on_key_press(symbol, modifier):
     if symbol == key.A:
         print("A was pressed")
-        tilemap = Carte.w_f_c_simplified(mm.create_matrix((10, 10),
+        tilemap = Carte.w_f_c_simplified(mm.create_matrix((20, 20),
                         {Carte.Plain:3, Carte.Mountain:1, Carte.Forest:2, Carte.Desert:2, Carte.Sea:1, Carte.River:2}))
         print(tilemap)
         for i in range(len(tilemap)):
@@ -30,7 +30,7 @@ def on_key_press(symbol, modifier):
                                            batch=batch 
                                            )
                 shapes.append(cell)
-        #print(shapes)
+        print(shapes)
     if symbol == key.B:
         r = ran.choice(shapes)
         r.delete()

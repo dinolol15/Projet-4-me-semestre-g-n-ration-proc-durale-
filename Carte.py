@@ -103,5 +103,5 @@ if __name__ == "__main__":
     
     a = w_f_c_simplified(mm.create_matrix((10, 10), {Plain:3, Mountain:1, Forest:2, Desert:2, Sea:1, River:2})) #{Plain:1, Mountain:1, Forest:1, Desert:1, Sea:1, River:1}
     
-    print(a)
-    #print('\n'.join([str(i) for i in a]))
+    
+    print('\n'.join([str(i) for i in a]))
