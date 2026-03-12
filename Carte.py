@@ -83,19 +83,19 @@ class Tile:
     def __repr__(self):
         return self.Name[0]
     
-Plain = Tile("Plain", 1, 1, (124, 252, 0), ("Sea", "Base"), ) #{"Sea" : 0, "Plain" : 2, "Forest" : 1}
-Mountain = Tile("Mountain", 0.25, 10, (139, 137, 137), ("Sea", "Base"), ) #{"Sea":0, "Mountain" : 1,}
-Forest = Tile("Forest", 1.25, 5, (34, 139, 34), ("Sea", "Desert",),) # {"Sea":0, "Mountain" : 1, "Plain" : 1, "Forest" : 2} 
-Sea = Tile("Sea", 0, 10000, (28, 107, 160), ("Plain", "Mountain", "Forest", "Desert")) #, {"Plain" : 0, "Mountain" : 0, "Forest" : 0, "Desert" : 0, "Sea" : 1}
-River = Tile("River", 0, 3, (70, 130, 180), (), ) #{"River" : 1,}
-Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), ("Sea", "Forest"))# {"Sea" : 0, "Forest" : 0, "Desert" : 2,}            
+#Plain = Tile("Plain", 1, 1, (124, 252, 0), ("Sea", "Base"), ) #{"Sea" : 0, "Plain" : 2, "Forest" : 1}
+#Mountain = Tile("Mountain", 0.25, 10, (139, 137, 137), ("Sea", "Base"), ) #{"Sea":0, "Mountain" : 1,}
+#Forest = Tile("Forest", 1.25, 5, (34, 139, 34), ("Sea", "Desert",),) # {"Sea":0, "Mountain" : 1, "Plain" : 1, "Forest" : 2} 
+#Sea = Tile("Sea", 0, 10000, (28, 107, 160), ("Plain", "Mountain", "Forest", "Desert")) #, {"Plain" : 0, "Mountain" : 0, "Forest" : 0, "Desert" : 0, "Sea" : 1}
+#River = Tile("River", 0, 3, (70, 130, 180), (), ) #{"River" : 1,}
+#Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), ("Sea", "Forest"))# {"Sea" : 0, "Forest" : 0, "Desert" : 2,}            
 
-#Plain = Tile("Plain", 1, 1, (124, 252, 0), ("Sea", "River"), )
-#Mountain = Tile("Mountain", 0.25, 10, (139, 137, 137), ("Sea", "Base", "River"), ) 
-#Forest = Tile("Forest", 1.25, 5, (34, 139, 34), ("Sea", "Desert", "River"),) 
-#Sea = Tile("Sea", 0, 10000, (28, 107, 160), ("Plain", "Mountain", "Forest", "Desert"))
-#River = Tile("River", 0, 3, (70, 130, 180), ("Plain", "Mountain", "Forest"), )
-#Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), ("Sea", "Forest")) 
+Plain = Tile("Plain", 1, 1, (124, 252, 0), ("Sea", "River"), )
+Mountain = Tile("Mountain", 0.25, 10, (139, 137, 137), ("Sea", "Base", "River"), ) 
+Forest = Tile("Forest", 1.25, 5, (34, 139, 34), ("Sea", "Desert", "River"),) 
+Sea = Tile("Sea", 0, 10000, (28, 107, 160), ("Plain", "Mountain", "Forest", "Desert"))
+River = Tile("River", 0, 3, (70, 130, 180), ("Plain", "Mountain", "Forest"), )
+Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), ("Sea", "Forest")) 
 
 if __name__ == "__main__":
     #Base est pour que le tuple en soit vraiment u et pas un str
