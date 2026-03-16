@@ -6,7 +6,7 @@ from pyglet.window import key, mouse
 
 
 window = py.window.Window()
-window.set_fullscreen(True)
+#window.set_fullscreen(True)
 
 dimension = (5, 5)
 batch = py.graphics.Batch()
@@ -22,8 +22,12 @@ def on_key_press(symbol, modifier):
         print(tilemap)
         for i in range(len(tilemap)):
             for j in range(len(tilemap[1])):
+                try:
+                    tilemap[i][j].Color
+                except AttributeError:
+                    continue
                 cell = py.shapes.Rectangle(x=50 + j*10,
-                                           y=1000 + i*(-10),
+                                           y=500 + i*(-10),
                                            width=10,
                                            height=10,
                                            color=tilemap[i][j].Color,

@@ -57,16 +57,7 @@ def condition(matrix, cell):
         except TypeError:
             continue
         
-        matrix[cell1[0][0]][cell1[0][1]] = {tile: count for tile, count in cell1[1].items() if tile.Name not in cell.wfc_delete}
-        
-        
-        #for tile, count in cell1[1].items():
-         #   if tile.Name in cell.wfc_coefficient.keys():
-                
-          #      pass
-                #todo
-                # 0 = suppression, sinon + ou -, si <0, ==0
-                
+        matrix[cell1[0][0]][cell1[0][1]] = {tile: count for tile, count in cell1[1].items() if tile.Name not in cell.wfc_delete}                
         
             
 @dataclass(eq=True, frozen=True)
