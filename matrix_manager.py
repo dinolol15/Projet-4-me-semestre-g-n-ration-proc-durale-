@@ -109,7 +109,7 @@ def lobject_cell(matrix, coordinate = None):
 def matrix_change(matrix, coords, dict_val : dict):
     """Donne une valeur parmiuns liste de valeur à une matrice sur une série de coordonnées"""
     for i in coords:
-        matrix[column][row] = ran.choice(list(Counter(dict_val.elements())))
+        matrix[i[0]][i[1]] = ran.choice(list(Counter(dict_val).elements()))
     return matrix
 
 if __name__ == "__main__":   

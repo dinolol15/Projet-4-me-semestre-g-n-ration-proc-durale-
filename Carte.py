@@ -10,7 +10,23 @@ import random as ran
 import matrix_manager as mm
 from collections import Counter
 
-def w_f_c_simplified(matrix):
+
+
+def water_placement(matrix, coords, humidity, prs):
+    """Place des zones d'eau de départ
+
+    prs --> proportionality River-Sea
+    """
+    coords_water = []
+    for _ in range(humidity):
+        coord = ran.choice(coords)
+        coords_water.append(coord)
+        coords.remove(coord)
+    matrix = mm.matrix_change(matrix, coords_water, prs)
+    return (coords, matrix)
+
+
+def w_f_c_evolved(matrix, water_p_val : tuple[int, dict]):
     """Retourne une matrix générée avec un wfc simplifié
 
     Les éléments de la matrix doivent être des listes
@@ -20,6 +36,23 @@ def w_f_c_simplified(matrix):
     MATRIX_SIZE = (len(matrix), len(matrix[len(matrix) - 1]))
     test_value = len(matrix)*len(matrix[len(matrix) - 1])
     
+    coordinates, matrix = (water_placement(matrix, coordinates, water_p_val[0], water_p_val[1]))
+    
+    for i in coordinates:
+        matrix[i[0]][i[1]] = matrix[i[0]][[1]][0]
+      
+    return matrix
+
+
+def w_f_c_simplified(matrix):
+    """Retourne une matrix générée avec un wfc simplifié
+
+    Les éléments de la matrix doivent être des listes
+    """
+    
+    coordinates = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
+    MATRIX_SIZE = (len(matrix), len(matrix[len(matrix) - 1]))
+    test_value = len(matrix)*len(matrix[len(matrix) - 1])
     
     
     while test_value != 0:
@@ -36,13 +69,6 @@ def w_f_c_simplified(matrix):
       
     return matrix
 
-def water_placement(matrix, coords, humidity):
-    """Place des zones d'eau de départ"""
-    liste_water = []
-    for i in in range(humidity):
-        coord = ran.choice(coords)
-        liste_water.append(coord)
-        coords.remove(coord)
 
 def condition(matrix, cell):
     """Enlève les possibilitées impossibles
