@@ -17,7 +17,10 @@ def w_f_c_simplified(matrix):
     """
     
     coordinates = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
+    MATRIX_SIZE = (len(matrix), len(matrix[len(matrix) - 1]))
     test_value = len(matrix)*len(matrix[len(matrix) - 1])
+    
+    
     
     while test_value != 0:
         cell = mm.lobject_cell(matrix, coordinates)
@@ -33,6 +36,13 @@ def w_f_c_simplified(matrix):
       
     return matrix
 
+def water_placement(matrix, coords, humidity):
+    """Place des zones d'eau de départ"""
+    liste_water = []
+    for i in in range(humidity):
+        coord = ran.choice(coords)
+        liste_water.append(coord)
+        coords.remove(coord)
 
 def condition(matrix, cell):
     """Enlève les possibilitées impossibles

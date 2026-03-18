@@ -27,7 +27,6 @@ def up(matrix, position):
     return ((position[0] - 1, position[1]) , matrix[position[0] - 1][position[1]])
     
 
-
 def down(matrix, position):
     """Retourne la position et la valeur d'une cellule en bas d'une cellule
     position[0] --> axe -y
@@ -36,7 +35,6 @@ def down(matrix, position):
     if position[0] >= len(matrix) - 1 :
         return None
     return ((position[0] + 1, position[1]), matrix[position[0] + 1][position[1]])
-    
     
     
 def right(matrix, position):
@@ -108,6 +106,11 @@ def lobject_cell(matrix, coordinate = None):
     else:
         return ob_cell(matrix, coordinate)
 
+def matrix_change(matrix, coords, dict_val : dict):
+    """Donne une valeur parmiuns liste de valeur à une matrice sur une série de coordonnées"""
+    for i in coords:
+        matrix[column][row] = ran.choice(list(Counter(dict_val.elements())))
+    return matrix
 
 if __name__ == "__main__":   
     a = create_matrix((4, 4))

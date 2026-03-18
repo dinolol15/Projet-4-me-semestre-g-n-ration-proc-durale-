@@ -18,7 +18,7 @@ def on_key_press(symbol, modifier):
     if symbol == key.A:
         print("A was pressed")
         tilemap = Carte.w_f_c_simplified(mm.create_matrix((40, 40),
-                        {Carte.Plain:3, Carte.Mountain:1, Carte.Forest:2, Carte.Desert:2, Carte.Sea:1, Carte.River:2}))
+                        {Carte.Sea:1, Carte.Desert:1, Carte.River:1})) #{Carte.Plain:3, Carte.Mountain:1, Carte.Forest:2, Carte.Desert:1, Carte.River:1}
         print(tilemap)
         for i in range(len(tilemap)):
             for j in range(len(tilemap[1])):
