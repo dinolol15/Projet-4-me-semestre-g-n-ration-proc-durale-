@@ -30,16 +30,20 @@ def w_f_c_evolved(matrix, water_p_val : tuple[int, dict]):
     """Retourne une matrix générée avec un wfc simplifié
 
     Les éléments de la matrix doivent être des listes
+    
+    water_p_val --> [nombre de tuiles d'eau placées au départ, types d'eau]
     """
     
     coordinates = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
     MATRIX_SIZE = (len(matrix), len(matrix[len(matrix) - 1]))
     test_value = len(matrix)*len(matrix[len(matrix) - 1])
+    value_to_delete = matrix[coordinates[0][0]][coordinates[0][1]]  #for real
     
     coordinates, matrix = (water_placement(matrix, coordinates, water_p_val[0], water_p_val[1]))
     
-    for i in coordinates:
-        matrix[i[0]][i[1]] = matrix[i[0]][[1]][0]
+    for i in coordinates: #to change
+        if matrix[i[0]][i[1]] == value_to_delete:
+            matrix[i[0]][i[1]] = Placeholer
       
     return matrix
 
@@ -109,20 +113,20 @@ class Tile:
     
     def __repr__(self):
         return self.Name[0]
-    
-#Plain = Tile("Plain", 1, 1, (124, 252, 0), ("Sea", "Base"), ) #{"Sea" : 0, "Plain" : 2, "Forest" : 1}
-#Mountain = Tile("Mountain", 0.25, 10, (139, 137, 137), ("Sea", "Base"), ) #{"Sea":0, "Mountain" : 1,}
-#Forest = Tile("Forest", 1.25, 5, (34, 139, 34), ("Sea", "Desert",),) # {"Sea":0, "Mountain" : 1, "Plain" : 1, "Forest" : 2} 
-#Sea = Tile("Sea", 0, 10000, (28, 107, 160), ("Plain", "Mountain", "Forest", "Desert")) #, {"Plain" : 0, "Mountain" : 0, "Forest" : 0, "Desert" : 0, "Sea" : 1}
-#River = Tile("River", 0, 3, (70, 130, 180), (), ) #{"River" : 1,}
-#Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), ("Sea", "Forest"))# {"Sea" : 0, "Forest" : 0, "Desert" : 2,}            
+
+Placeholer = Tile("Placeholer", 0, 0, (255, 255, 255), (), )
 
 Plain = Tile("Plain", 1, 1, (124, 252, 0), ("Sea", "River"), )
 Mountain = Tile("Mountain", 0.25, 10, (139, 137, 137), ("Sea", "Base", "River"), ) 
 Forest = Tile("Forest", 1.25, 5, (34, 139, 34), ("Sea", "Desert", "River"),) 
 Sea = Tile("Sea", 0, 10000, (28, 107, 160), ("Plain", "Mountain", "Forest", "Desert"))
 River = Tile("River", 0, 3, (70, 130, 180), ("Plain", "Mountain", "Forest"), )
-Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), ("Sea", "Forest")) 
+Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), ("Sea", "Forest"))
+
+#simplified
+Water = Tile("Water", 1, 1, (70, 130, 180), ("Ground",) ) 
+Coast = Tile("Coast", 1, 1, (237, 201, 175), () ) 
+Ground = Tile("Ground", 1, 1, (34, 139, 34), ("Water",) ) 
 
 if __name__ == "__main__":
     #Base est pour que le tuple en soit vraiment u et pas un str
@@ -130,5 +134,7 @@ if __name__ == "__main__":
     
     a = w_f_c_simplified(mm.create_matrix((10, 10), {Plain:3, Mountain:1, Forest:2, Desert:2, Sea:1, River:2})) #{Plain:1, Mountain:1, Forest:1, Desert:1, Sea:1, River:1}
     
+    b = w_f_c_evolved(mm.create_matrix((10, 10), {Water:1, Ground:1, Coast:1}),
+                      (5, {Water : 1}))
     
-    print('\n'.join([str(i) for i in a]))
+    print('\n'.join([str(i) for i in b]))

@@ -17,8 +17,9 @@ shapes = []
 def on_key_press(symbol, modifier):
     if symbol == key.A:
         print("A was pressed")
-        tilemap = Carte.w_f_c_simplified(mm.create_matrix((40, 40),
-                        {Carte.Desert:1, Carte.Sea:1, Carte.River:1})) #{Carte.Plain:3, Carte.Mountain:1, Carte.Forest:2, Carte.Desert:1, Carte.River:1}
+        tilemap = Carte.w_f_c_evolved(mm.create_matrix((40, 40),
+                        {Carte.Water:1, Carte.Ground:1, Carte.Coast:1}),
+                                      (10, {Carte.Water : 1})) #{Carte.Plain:3, Carte.Mountain:1, Carte.Forest:2, Carte.Desert:1, Carte.River:1} si w_f_c_simplified (il faut enlever le deuxième argument)
         print(tilemap)
         for i in range(len(tilemap)):
             for j in range(len(tilemap[1])):
