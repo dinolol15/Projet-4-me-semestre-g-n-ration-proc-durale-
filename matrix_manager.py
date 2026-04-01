@@ -112,6 +112,46 @@ def matrix_change(matrix, coords, dict_val : dict):
         matrix[i[0]][i[1]] = ran.choice(list(Counter(dict_val).elements()))
     return matrix
 
+
+def fill(martix, value_desired, position_cell = tuple[int, int]):
+    """Regarde si une cellule est entourée de cellule de la même valeur
+       le cas échéant, donne la même valeur à la cellule
+    """
+    test_value = True
+    for i in range(4):
+        match i:
+                case 0:
+                    func_test = up
+                case 1:
+                    func_test = down
+                case 2:
+                    func_test = right
+                case 3:
+                    func_test = left
+        if func_test(matrix, position_cell)[1] != value_desired:
+            test_value = False
+    if test_value:
+        martix[position_cell[0]][position_cell[1]] = value_desired
+    return matrix
+
+            
+def random_walk(martix, starting_pos = tuple, steps = int, lenght = int):        
+        """Réalise l'algorythme de random walk"""
+        for p in starting_pos:
+            actual_position = p
+            for i in range(steps):
+                direction = ran.randint(0,3)
+                match direction:
+                    case 0:
+                        pass
+                    case 1:
+                        pass
+                    case 2:
+                        pass
+                    case 3:
+                        pass
+                
+
 if __name__ == "__main__":   
     a = create_matrix((4, 4))
     print('\n'.join([str(i) for i in a]))
