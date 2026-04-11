@@ -54,6 +54,7 @@ def w_f_c_simplified(matrix):
     Les éléments de la matrix doivent être des listes
     """
     
+    COORDINATES = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
     coordinates = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
     MATRIX_SIZE = (len(matrix), len(matrix[len(matrix) - 1]))
     test_value = len(matrix)*len(matrix[len(matrix) - 1])
@@ -70,7 +71,10 @@ def w_f_c_simplified(matrix):
         matrix[cell[0][0]][cell[0][1]] = ran.choice(list(Counter(cell[1]).elements()))
         condition(matrix, ((cell[0][0], cell[0][1]), matrix[cell[0][0]][cell[0][1]]))
         test_value -= 1
-      
+    
+    for i in COORDINATES:
+        matrix = mm.fill(matrix, i)
+    
     return matrix
 
 

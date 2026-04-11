@@ -113,25 +113,33 @@ def matrix_change(matrix, coords, dict_val : dict):
     return matrix
 
 
-def fill(martix, value_desired, position_cell = tuple[int, int]):
+def fill(matrix, position_cell : tuple[int, int]):
     """Regarde si une cellule est entourée de cellule de la même valeur
        le cas échéant, donne la même valeur à la cellule
     """
     test_value = True
+    
+    if up(matrix, position_cell) == None:
+        print(down(matrix, position_cell))
+        value_desired = down(matrix, position_cell)[1]
+    else: 
+        value_desired = up(matrix, position_cell)[1]
+        
     for i in range(4):
         match i:
                 case 0:
-                    func_test = up
+                    func = up
                 case 1:
-                    func_test = down
+                    func = down
                 case 2:
-                    func_test = right
+                    func = right
                 case 3:
-                    func_test = left
-        if func_test(matrix, position_cell)[1] != value_desired:
-            test_value = False
+                    func = left
+        if func(matrix, position_cell) != None :
+            if func(matrix, position_cell)[1] != value_desired:
+                test_value = False
     if test_value:
-        martix[position_cell[0]][position_cell[1]] = value_desired
+        matrix[position_cell[0]][position_cell[1]] = value_desired
     return matrix
 
             
@@ -143,13 +151,16 @@ def random_walk(martix, starting_pos = tuple, steps = int, lenght = int):
                 direction = ran.randint(0,3)
                 match direction:
                     case 0:
-                        pass
+                        func = up
                     case 1:
-                        pass
+                        func = down
                     case 2:
-                        pass
+                        func = right
                     case 3:
-                        pass
+                        func = left
+                
+                for _ in range(lenght):
+                    pass
                 
 
 if __name__ == "__main__":   
