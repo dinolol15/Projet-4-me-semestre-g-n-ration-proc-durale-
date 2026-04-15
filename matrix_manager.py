@@ -127,14 +127,14 @@ def fill(matrix, position_cell : tuple[int, int]):
         
     for i in range(4):
         match i:
-                case 0:
-                    func = up
-                case 1:
-                    func = down
-                case 2:
-                    func = right
-                case 3:
-                    func = left
+            case 0:
+                func = up
+            case 1:
+                func = down
+            case 2:
+                func = right
+            case 3:
+                func = left
         if func(matrix, position_cell) != None :
             if func(matrix, position_cell)[1] != value_desired:
                 test_value = False
@@ -143,7 +143,7 @@ def fill(matrix, position_cell : tuple[int, int]):
     return matrix
 
             
-def random_walk(martix, starting_pos = tuple, steps = int, lenght = int):        
+def random_walk(matrix, starting_pos: tuple, steps: int, max_lenght: int, value: object):        
         """Réalise l'algorythme de random walk"""
         for p in starting_pos:
             actual_position = p
@@ -159,9 +159,41 @@ def random_walk(martix, starting_pos = tuple, steps = int, lenght = int):
                     case 3:
                         func = left
                 
+                lenght = ran.randint(0, max_lenght)
                 for _ in range(lenght):
-                    pass
+                    if func(matrix, actual_position) != None:
+                        actual_position = func(matrix, actual_position)[0]
+                    matrix[actual_position[0]][actual_position[1]] = value
+        return matrix
                 
+
+def in_concact(matrix, position_cell: tuple[int, int], value_desired: object, value_given: object, except_value: object):
+    """Regarde si une cellule est en contact
+       d'une cellule d'une certaine valeur
+       sauf si la valeur de la cellue est except_value
+    """
+    test_value = False
+        
+    for i in range(4):
+        match i:
+                case 0:
+                    func = up
+                case 1:
+                    func = down
+                case 2:
+                    func = right
+                case 3:
+                    func = left
+        if func(matrix, position_cell) != None:
+            if func(matrix, position_cell)[1] == value_desired:
+                if matrix[position_cell[0]][position_cell[1]] != except_value:
+                    test_value = True
+                    break
+    
+    if test_value:
+        matrix[position_cell[0]][position_cell[1]] = value_given
+    return matrix
+
 
 if __name__ == "__main__":   
     a = create_matrix((4, 4))

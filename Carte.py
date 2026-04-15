@@ -23,28 +23,38 @@ def water_placement(matrix, coords, humidity, prs):
         coords_water.append(coord)
         coords.remove(coord)
     matrix = mm.matrix_change(matrix, coords_water, prs)
-    return (coords, matrix)
+    return (coords, matrix, coords_water)
 
 
-def w_f_c_evolved(matrix, water_p_val : tuple[int, dict]):
+def w_f_c_evolved(matrix, water_p_val: tuple[int, dict], ran_wal_value: [int, int, object], humidity: int=1):
     """Retourne une matrix générée avec un wfc simplifié
 
     Les éléments de la matrix doivent être des listes
     
+    ne marche qu'avec un triple élément
+    
     water_p_val --> [nombre de tuiles d'eau placées au départ, types d'eau]
     """
     
-    coordinates = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
+    COORDINATES = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
+    coordinates = COORDINATES
     MATRIX_SIZE = (len(matrix), len(matrix[len(matrix) - 1]))
     test_value = len(matrix)*len(matrix[len(matrix) - 1])
     value_to_delete = matrix[coordinates[0][0]][coordinates[0][1]]  #for real
     
-    coordinates, matrix = (water_placement(matrix, coordinates, water_p_val[0], water_p_val[1]))
+    coordinates, matrix, water_coordinates = (water_placement(matrix, coordinates, water_p_val[0], water_p_val[1]))
     
-    for i in coordinates: #to change
-        if matrix[i[0]][i[1]] == value_to_delete:
-            matrix[i[0]][i[1]] = Placeholer
-      
+    for i in range(humidity):
+        matrix = mm.random_walk(matrix, water_coordinates, ran_wal_value[0], ran_wal_value[1], ran_wal_value[2])
+    
+    for p in COORDINATES:
+        matrix = mm.in_concact(matrix, p, Water, Coast, Water)
+        if matrix[p[0]][p[1]] != Water and  matrix[p[0]][p[1]] != Coast:
+            matrix[p[0]][p[1]] = Ground
+    
+    for p in COORDINATES:
+        matrix = mm.fill(matrix, p)
+    
     return matrix
 
 
@@ -127,7 +137,7 @@ Sea = Tile("Sea", 0, 10000, (28, 107, 160), ("Plain", "Mountain", "Forest", "Des
 River = Tile("River", 0, 3, (70, 130, 180), ("Plain", "Mountain", "Forest"), )
 Desert = Tile("Desert", 0.1, 0.5, (237, 201, 175), ("Sea", "Forest"))
 
-#simplified
+#oobligatoire pour w_f_c_evolved
 Water = Tile("Water", 1, 1, (70, 130, 180), ("Ground",) ) 
 Coast = Tile("Coast", 1, 1, (237, 201, 175), () ) 
 Ground = Tile("Ground", 1, 1, (34, 139, 34), ("Water",) ) 
@@ -139,6 +149,6 @@ if __name__ == "__main__":
     a = w_f_c_simplified(mm.create_matrix((10, 10), {Plain:3, Mountain:1, Forest:2, Desert:2, Sea:1, River:2})) #{Plain:1, Mountain:1, Forest:1, Desert:1, Sea:1, River:1}
     
     b = w_f_c_evolved(mm.create_matrix((10, 10), {Water:1, Ground:1, Coast:1}),
-                      (5, {Water : 1}))
+                      (5, {Water : 1}), [25, 1, Water])
     
     print('\n'.join([str(i) for i in b]))
