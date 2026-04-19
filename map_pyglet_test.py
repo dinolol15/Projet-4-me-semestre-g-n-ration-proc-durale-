@@ -6,7 +6,6 @@ from pyglet.window import key, mouse
 
 
 window = py.window.Window()
-#window.set_fullscreen(True)
 
 dimension = (5, 5)
 batch = py.graphics.Batch()
@@ -17,12 +16,16 @@ shapes = []
 def on_key_press(symbol, modifier):
     if symbol == key.A:
         print("A was pressed")
-        #tilemap = Carte.w_f_c_simplified(mm.create_matrix((40, 40),
-        #                {Carte.Water:1, Carte.Ground:1, Carte.Coast:1}),
-        #                              ) #{Carte.Plain:3, Carte.Mountain:1, Carte.Forest:2, Carte.Desert:1, Carte.River:1} si w_f_c_simplified (il faut enlever le deuxième argument) / pour evolved (10, {Carte.Water : 1}
-        tilemap = Carte.w_f_c_evolved(mm.create_matrix((40, 40),
-                        {"baba": 2}),
-                                      (10, {Carte.Water : 3}), [50, 3, Carte.Water])
+        a = input("choix ")
+        if a == "1":
+            tilemap = Carte.w_f_c_simplified(mm.create_matrix((40, 40),
+                            {Carte.Water:1, Carte.Ground:1, Carte.Coast:1}),
+                                          )
+        
+        else:
+            tilemap = Carte.w_f_c_evolved(mm.create_matrix((40, 40),
+                                                           {"baba": 2}),
+                                                            10, [50, 3, Carte.Water])
         print(tilemap)
         for i in range(len(tilemap)):
             for j in range(len(tilemap[1])):
@@ -44,7 +47,7 @@ def on_key_press(symbol, modifier):
         r.delete()
 
 def matrice_creation(dimension_x, dimension_y):
-    """Fonction creant une matrice"""
+    """Fonction créant une matrice"""
     matrice = []
     for i in range(dimension_x):
         matrice.append([])

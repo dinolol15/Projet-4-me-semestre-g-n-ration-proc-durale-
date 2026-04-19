@@ -5,12 +5,15 @@ Auteur: Adrien Buschbeck, Albert ...
 """
 
 from collections import Counter
+import dataclasses as dc
+from dataclasses import dataclass
 import itertools as it
 import random as ran
 
 
 def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -> list:
-    """retourne une matrice où chaque cellule est remplie par element
+    """
+    Retourne une matrice où chaque cellule est remplie par element
     dim[0] --> axe -y
     dim[1] --> axe x
     """
@@ -18,50 +21,60 @@ def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -
 
 
 def up(matrix, position):
-    """Retourne la position et la valeur d'une cellule en haut d'une cellule
+    """
+    Retourne la position et la valeur d'une cellule en haut d'une cellule
     position[0] --> axe -y
     position[1] --> axe x
     """
     if position[0] == 0:
         return None 
-    return ((position[0] - 1, position[1]) , matrix[position[0] - 1][position[1]])
+    return ((position[0] - 1, position[1]),
+            matrix[position[0] - 1][position[1]])
     
 
 def down(matrix, position):
-    """Retourne la position et la valeur d'une cellule en bas d'une cellule
+    """
+    Retourne la position et la valeur d'une cellule en bas d'une cellule
     position[0] --> axe -y
     position[1] --> axe x
     """
     if position[0] >= len(matrix) - 1 :
         return None
-    return ((position[0] + 1, position[1]), matrix[position[0] + 1][position[1]])
+    return ((position[0] + 1, position[1]),
+            matrix[position[0] + 1][position[1]])
     
     
 def right(matrix, position):
-    """"Retourne la position et la valeur d'une cellule à droite d'une cellule
+    """
+    Retourne la position et la valeur d'une cellule à droite d'une cellule
     position[0] --> axe -y
     position[1] --> axe x
     """
     if position[1] == len(matrix[position[0]]) - 1:
         return None 
-    return ((position[0], position[1] + 1), matrix[position[0]][position[1] + 1])
+    return ((position[0], position[1] + 1),
+            matrix[position[0]][position[1] + 1])
     
     
 def left(matrix, position):
-    """Retourne la position et la valeur d'une cellule à gauche d'une cellule
+    """
+    Retourne la position et la valeur d'une cellule à gauche d'une cellule
     position[0] --> axe -y
     position[1] --> axe x
     """
     if position[1] == 0:
         return None
-    return ((position[0], position[1] - 1), matrix[position[0]][position[1] - 1])
+    return ((position[0], position[1] - 1),
+            matrix[position[0]][position[1] - 1])
 
 def random_cell(matrix, coordinate = None):
-    """Retourne la valeur et la position aléatoire
-        d'une cellule cellule aléatoire d'une matrice
-        
-        coordinate[0] --> axe -y
-        coordinate[1] --> axe x
+    """
+    Retourne la valeur et la position aléatoire
+    d'une cellule cellule aléatoire d'une matrice
+    parmi une série de coordonnées 
+     
+    coordinate[0] --> axe -y
+    coordinate[1] --> axe x
     """
     coords = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
     
@@ -79,16 +92,18 @@ def random_cell(matrix, coordinate = None):
 
 
 def lobject_cell(matrix, coordinate = None):
-    """Retourne la valeur et la position aléatoire
-        de la cellule avec le moins d'éléments dans la matrice
+    """
+    Retourne la valeur et la position aléatoire
+    de la cellule avec le moins d'éléments dans la matrice
         
-        coordinate[0] --> axe -y
-        coordinate[1] --> axe x
+    coordinate[0] --> axe -y
+    coordinate[1] --> axe x
     """
     coords = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
     
     def ob_cell(matrix, coordinates = coords):
-        cell_min = [((coordinates[0][0], coordinates[0][1]), matrix[coordinates[0][0]][coordinates[0][1]])]
+        cell_min = [((coordinates[0][0], coordinates[0][1]),
+                     matrix[coordinates[0][0]][coordinates[0][1]])]
         for c in coordinates:
             column = c[0]
             row = c[1]
@@ -107,15 +122,19 @@ def lobject_cell(matrix, coordinate = None):
         return ob_cell(matrix, coordinate)
 
 def matrix_change(matrix, coords, dict_val : dict):
-    """Donne une valeur parmiuns liste de valeur à une matrice sur une série de coordonnées"""
+    """
+    Donne une valeur parmiuns liste de valeur
+    à une matrice sur une série de coordonnées
+    """
     for i in coords:
         matrix[i[0]][i[1]] = ran.choice(list(Counter(dict_val).elements()))
     return matrix
 
 
 def fill(matrix, position_cell : tuple[int, int]):
-    """Regarde si une cellule est entourée de cellule de la même valeur
-       le cas échéant, donne la même valeur à la cellule
+    """
+    Regarde si une cellule est entourée de cellule de la même valeur
+    le cas échéant, donne la même valeur à la cellule
     """
     test_value = True
     
@@ -144,7 +163,9 @@ def fill(matrix, position_cell : tuple[int, int]):
 
             
 def random_walk(matrix, starting_pos: tuple, steps: int, max_lenght: int, value: object):        
-        """Réalise l'algorythme de random walk"""
+        """
+        Réalise l'algorythme de random walk
+        """
         for p in starting_pos:
             actual_position = p
             for i in range(steps):
@@ -168,9 +189,10 @@ def random_walk(matrix, starting_pos: tuple, steps: int, max_lenght: int, value:
                 
 
 def in_concact(matrix, position_cell: tuple[int, int], value_desired: object, value_given: object, except_value: object):
-    """Regarde si une cellule est en contact
-       d'une cellule d'une certaine valeur
-       sauf si la valeur de la cellue est except_value
+    """
+    Regarde si une cellule est en contact
+    d'une cellule d'une certaine valeur
+    sauf si la valeur de la cellue est except_value
     """
     test_value = False
         
