@@ -1,7 +1,7 @@
 """
 Gère plusieurs opérations sur des matrcies
 
-Auteur: Adrien Buschbeck, Albert ...
+Auteur: Adrien Buschbeck, Albert Stanislawek
 """
 
 from collections import Counter
@@ -108,10 +108,13 @@ def lobject_cell(matrix, coordinate = None):
             column = c[0]
             row = c[1]
             cell = matrix[column][row]
-            if len(list(Counter(cell).elements())) == len(list(Counter(matrix[cell_min[0][0][0]][cell_min[0][0][1]]).elements())):
+            
+            vartest = len(list(Counter(matrix[cell_min[0][0][0]][cell_min[0][0][1]]).elements()))
+            
+            if len(list(Counter(cell).elements())) == vartest:
                 cell_min.append(((column, row), matrix[column][row]))
             
-            elif len(list(Counter(cell).elements())) < len(list(Counter(matrix[cell_min[0][0][0]][cell_min[0][0][1]]).elements())):
+            elif len(list(Counter(cell).elements())) < vartest:
                 cell_min = [((c[0], c[1]), cell)]
         
         return ran.choice(cell_min)
