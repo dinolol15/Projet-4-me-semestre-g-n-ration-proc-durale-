@@ -54,7 +54,7 @@ def right(matrix, position):
         return None 
     return ((position[0], position[1] + 1),
             matrix[position[0]][position[1] + 1])
-    
+
     
 def left(matrix, position):
     """
@@ -220,18 +220,27 @@ def in_concact(matrix, position_cell: tuple[int, int], value_desired: object, va
     return matrix
 
 
-@dataclass(eq=True, frozen=True)
-class position():
+@dataclass(eq=True)
+class Position:
     """
     Classe représentant les différentes positions
-    y --> position y
-    x --> position x
+    Y --> position y
+    X --> position x
     """
-    
     Y: int
-    x: int
-    pass
+    X: int
+    
+    def __repr__(self):
+        return (self.Y, self.X)
 
+@dataclass
+class Cell:
+    pass
+    
+
+@dataclass(eq=True)
+class Matrix:
+    pass
 
 if __name__ == "__main__":   
     a = create_matrix((4, 4))
