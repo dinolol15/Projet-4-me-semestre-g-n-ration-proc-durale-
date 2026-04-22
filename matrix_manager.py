@@ -220,6 +220,19 @@ def in_concact(matrix, position_cell: tuple[int, int], value_desired: object, va
     return matrix
 
 
+@dataclass(eq=True, frozen=True)
+class position():
+    """
+    Classe représentant les différentes positions
+    y --> position y
+    x --> position x
+    """
+    
+    Y: int
+    x: int
+    pass
+
+
 if __name__ == "__main__":   
     a = create_matrix((4, 4))
     print('\n'.join([str(i) for i in a]))

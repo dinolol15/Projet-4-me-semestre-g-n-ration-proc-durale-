@@ -25,7 +25,7 @@ def on_key_press(symbol, modifier):
         else:
             tilemap = Carte.w_f_c_evolved(mm.create_matrix((40, 40),
                                                            {"baba": 2}),
-                                                            10, [50, 3, Carte.Water])
+                                                            10, [50, 3, Carte.Water], 3)
         print(tilemap)
         for i in range(len(tilemap)):
             for j in range(len(tilemap[1])):
