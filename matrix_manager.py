@@ -9,6 +9,7 @@ import dataclasses as dc
 from dataclasses import dataclass
 import itertools as it
 import random as ran
+from typing import TypeAlias
 
 
 def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -> list:
@@ -219,28 +220,6 @@ def in_concact(matrix, position_cell: tuple[int, int], value_desired: object, va
         matrix[position_cell[0]][position_cell[1]] = value_given
     return matrix
 
-
-@dataclass(eq=True)
-class Position:
-    """
-    Classe représentant les différentes positions
-    Y --> position y
-    X --> position x
-    """
-    Y: int
-    X: int
-    
-    def __repr__(self):
-        return (self.Y, self.X)
-
-@dataclass
-class Cell:
-    pass
-    
-
-@dataclass(eq=True)
-class Matrix:
-    pass
 
 if __name__ == "__main__":   
     a = create_matrix((4, 4))
