@@ -15,7 +15,8 @@ Position: TypeAlias = tuple[int, int]
 Coordinate: TypeAlias = list[Position,]
 Matrix: TypeAlias = list[list[object, ...],]
 
-def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -> list:
+def create_matrix(dim: tuple[int, int] | list[int, int],
+                  element : object = 0) -> list:
     """
     Retourne une matrice où chaque cellule est remplie par element
     dim[0] --> axe -y
@@ -113,7 +114,8 @@ def lobject_cell(matrix: Matrix, coordinate: Coordinate = None):
             row = c[1]
             cell = matrix[column][row]
             
-            vartest = len(list(Counter(matrix[cell_min[0][0][0]][cell_min[0][0][1]]).elements()))
+            vartest = len(list(Counter(matrix[cell_min[0][0][0]][cell_min[0][0][1]])
+                               .elements()))
             
             if len(list(Counter(cell).elements())) == vartest:
                 cell_min.append(((column, row), matrix[column][row]))
@@ -169,7 +171,8 @@ def fill(matrix: Matrix, position_cell : Position):
     return matrix
 
             
-def random_walk(matrix: Matrix, starting_pos: Coordinate, steps: int, max_lenght: int, value: object):        
+def random_walk(matrix: Matrix, starting_pos: Coordinate,
+                steps: int, max_lenght: int, value: object):        
         """
         Réalise l'algorythme de random walk
         """
@@ -195,7 +198,9 @@ def random_walk(matrix: Matrix, starting_pos: Coordinate, steps: int, max_lenght
         return matrix
                 
 
-def in_concact(matrix: Matrix, position_cell: Position, value_desired: object, value_given: object, except_value: object):
+def in_concact(matrix: Matrix, position_cell: Position,
+               value_desired: object, value_given: object,
+               except_value: object):
     """
     Regarde si une cellule est en contact
     d'une cellule d'une certaine valeur
