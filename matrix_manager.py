@@ -11,6 +11,8 @@ import itertools as it
 import random as ran
 from typing import TypeAlias
 
+Position: TypeAlias = tuple[int, int]
+
 
 def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -> list:
     """
@@ -21,7 +23,7 @@ def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -
     return [[element for j in range(dim[1])] for i in range(dim[0])]
 
 
-def up(matrix, position):
+def up(matrix, position: Position):
     """
     Retourne la position et la valeur d'une cellule en haut d'une cellule
     position[0] --> axe -y
@@ -33,7 +35,7 @@ def up(matrix, position):
             matrix[position[0] - 1][position[1]])
     
 
-def down(matrix, position):
+def down(matrix, position: Position):
     """
     Retourne la position et la valeur d'une cellule en bas d'une cellule
     position[0] --> axe -y
@@ -45,7 +47,7 @@ def down(matrix, position):
             matrix[position[0] + 1][position[1]])
     
     
-def right(matrix, position):
+def right(matrix, position: Position):
     """
     Retourne la position et la valeur d'une cellule à droite d'une cellule
     position[0] --> axe -y
@@ -57,7 +59,7 @@ def right(matrix, position):
             matrix[position[0]][position[1] + 1])
 
     
-def left(matrix, position):
+def left(matrix, position: Position):
     """
     Retourne la position et la valeur d'une cellule à gauche d'une cellule
     position[0] --> axe -y
@@ -125,17 +127,17 @@ def lobject_cell(matrix, coordinate = None):
     else:
         return ob_cell(matrix, coordinate)
 
-def matrix_change(matrix, coords, dict_val : dict):
+def matrix_change(matrix, coordinate, dict_val : dict):
     """
     Donne une valeur parmiuns liste de valeur
     à une matrice sur une série de coordonnées
     """
-    for i in coords:
+    for i in coordinate:
         matrix[i[0]][i[1]] = ran.choice(list(Counter(dict_val).elements()))
     return matrix
 
 
-def fill(matrix, position_cell : tuple[int, int]):
+def fill(matrix, position_cell : Position):
     """
     Regarde si une cellule est entourée de cellule de la même valeur
     le cas échéant, donne la même valeur à la cellule
@@ -192,7 +194,7 @@ def random_walk(matrix, starting_pos: tuple, steps: int, max_lenght: int, value:
         return matrix
                 
 
-def in_concact(matrix, position_cell: tuple[int, int], value_desired: object, value_given: object, except_value: object):
+def in_concact(matrix, position_cell: Position, value_desired: object, value_given: object, except_value: object):
     """
     Regarde si une cellule est en contact
     d'une cellule d'une certaine valeur
