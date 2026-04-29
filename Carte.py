@@ -11,7 +11,8 @@ import random as ran
 import matrix_manager as mm
 
 
-def water_placement(matrix: mm.Matrix, coordinate: mm.Coordinate, humidity):
+def water_placement(matrix: mm.Matrix, coordinate: mm.Coordinate, humidity,
+                    set_of_value: dict=None): #toDo fix ahh bug
     """
     Place des zones d'eau de départ
     humidity --> nombres de point d'eau aux départs
@@ -38,8 +39,6 @@ def w_f_c_evolved(matrix: mm.Matrix, water_p_val: int, ran_wal_value: tuple[int,
     COORDINATES = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
     coordinates = COORDINATES
     MATRIX_SIZE = (len(matrix), len(matrix[len(matrix) - 1]))
-    test_value = len(matrix)*len(matrix[len(matrix) - 1])
-    value_to_delete = matrix[coordinates[0][0]][coordinates[0][1]]  #for real
     
     coordinates, matrix, water_coordinates = (water_placement(matrix, coordinates, water_p_val))
     
@@ -151,7 +150,7 @@ Ground = Tile("Ground", (34, 139, 34), ("Water",)) #(1, 1,)
 if __name__ == "__main__":
     
     
-    a = w_f_c_simplified(mm.create_matrix((10, 10), {Plain:3, Mountain:1, Forest:2, Desert:2, Sea:1, River:2})) #{Plain:1, Mountain:1, Forest:1, Desert:1, Sea:1, River:1}
+    a = w_f_c_simplified(mm.create_matrix((10, 10), {Plain:3, Mountain:1, Forest:2, Desert:2, Sea:1, River:2}))
     
     b = w_f_c_evolved(mm.create_matrix((10, 10), {Water:1, Ground:1, Coast:1}),
                       5, [25, 1, Water])
