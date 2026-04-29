@@ -26,7 +26,8 @@ def water_placement(matrix: mm.Matrix, coordinate: mm.Coordinate, humidity,
     return (coordinate, matrix, coords_water)
 
 
-def w_f_c_evolved(matrix: mm.Matrix, water_p_val: int, ran_wal_value: tuple[int, int, object], humidity: int=1):
+def w_f_c_evolved(matrix: mm.Matrix, water_p_val: int,
+                  ran_wal_value: tuple[int, int, object], humidity: int=1):
     """
     Retourne une matrix générée avec un wfc simplifié
 
@@ -39,11 +40,14 @@ def w_f_c_evolved(matrix: mm.Matrix, water_p_val: int, ran_wal_value: tuple[int,
     COORDINATES = [(i, j) for j in range(len(matrix[len(matrix) - 1])) for i in range(len(matrix))]
     coordinates = COORDINATES
     MATRIX_SIZE = (len(matrix), len(matrix[len(matrix) - 1]))
-    
-    coordinates, matrix, water_coordinates = (water_placement(matrix, coordinates, water_p_val))
+    coordinates, matrix, water_coordinates = water_placement(matrix,
+                                                             coordinates,
+                                                             water_p_val)
     
     for i in range(humidity):
-        matrix = mm.random_walk(matrix, water_coordinates, ran_wal_value[0], ran_wal_value[1], ran_wal_value[2])
+        matrix = mm.random_walk(matrix, water_coordinates,
+                                ran_wal_value[0], ran_wal_value[1],
+                                ran_wal_value[2])
     
     for p in COORDINATES:
         matrix = mm.in_concact(matrix, p, Water, Coast, Water)
@@ -77,8 +81,10 @@ def w_f_c_simplified(matrix: mm.Matrix):
             print(test_value)
             break
         
-        matrix[cell[0][0]][cell[0][1]] = ran.choice(list(Counter(cell[1]).elements()))
-        condition(matrix, ((cell[0][0], cell[0][1]), matrix[cell[0][0]][cell[0][1]]))
+        matrix[cell[0][0]][cell[0][1]] = ran.choice(list(Counter(cell[1])
+                                                         .elements()))
+        condition(matrix, ((cell[0][0], cell[0][1]),
+                           matrix[cell[0][0]][cell[0][1]]))
         test_value -= 1
     
     for i in COORDINATES:
@@ -150,7 +156,9 @@ Ground = Tile("Ground", (34, 139, 34), ("Water",)) #(1, 1,)
 if __name__ == "__main__":
     
     
-    a = w_f_c_simplified(mm.create_matrix((10, 10), {Plain:3, Mountain:1, Forest:2, Desert:2, Sea:1, River:2}))
+    a = w_f_c_simplified(mm.create_matrix((10, 10), {Plain:3, Mountain:1,
+                                                     Forest:2, Desert:2,
+                                                     Sea:1, River:2}))
     
     b = w_f_c_evolved(mm.create_matrix((10, 10), {Water:1, Ground:1, Coast:1}),
                       5, [25, 1, Water])
