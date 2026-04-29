@@ -226,26 +226,22 @@ def in_concact(matrix: Matrix, position_cell: Position, value_desired: object, v
 def test():
     matrix_test = create_matrix((10, 10))
     
-    print("test hors map")
+    matrix_test[1][0] = "left"
+    matrix_test[1][2] = "right"
+    matrix_test[0][1] = "up"
+    matrix_test[2][1] = "down"
+    #test in map
+    assert up(matrix_test, (1, 1))[1] == "up"
+    assert down(matrix_test, (1, 1))[1] == "down"
+    assert left(matrix_test, (1, 1))[1] == "left"
+    assert right(matrix_test, (1, 1))[1] == "right"
+    #test hors map
     assert up(matrix_test, (0, 2)) == None
     assert down(matrix_test, (9, 2)) == None
     assert left(matrix_test, (5, 0)) == None
     assert right(matrix_test, (9, 9)) == None
-    print("mi bombo")
+    print("tous les tests sont passés")
         
 
 if __name__ == "__main__":   
-    
-    a = create_matrix((4, 4))
-    print('\n'.join([str(i) for i in a]))
-    print(f"up {up(a, (2, 1))}")
-    print(f"down {down(a, (2, 1))}")
-    print(f"left {left(a, (2, 1))}")
-    print(f"right {right(a, (2, 1))}")
-    
-    print("test hors map")
-    print(f"up {up(a, (0, 2))}")
-    print(f"down {down(a, (3, 2))}")
-    print(f"left {left(a, (2, 0))}")
-    print(f"right {right(a, (3, 3))}")
     test()
