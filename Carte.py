@@ -5,14 +5,25 @@ Auteur: Adrien Buschbeck
 """
 
 from collections import Counter
-import dataclasses as dc
-from dataclasses import dataclass
 import random as ran
 import matrix_manager as mm
+import Tile
 
+#faire enum et NamedTule
+Plain = Tile.Tile("Plain", (124, 252, 0), ("Sea", "River")) #(1, 1,)
+Mountain = Tile.Tile("Mountain", (139, 137, 137), ("Sea", "River")) #(0.25, 10,)
+Forest = Tile.Tile("Forest", (34, 139, 34), ("Sea", "Desert", "River")) #(1.25, 5,)
+Sea = Tile.Tile("Sea", (28, 107, 160), ("Plain", "Mountain", "Forest", "Desert")) #(0, 10000,)
+River = Tile.Tile("River", (70, 130, 180), ("Plain", "Mountain", "Forest")) #(0, 3,)
+Desert = Tile.Tile("Desert", (237, 201, 175), ("Sea", "Forest")) #(0.1, 0.5,)
 
-def water_placement(matrix: mm.Matrix, coordinate: mm.Coordinate, humidity,
-                    set_of_value: dict=None): #toDo fix ahh bug
+#obligatoire pour w_f_c_evolved 
+Water = Tile.Tile("Water",  (70, 130, 180), ("Ground",)) #(1, 1,)
+Coast = Tile.Tile("Coast", (237, 201, 175), ()) #(1, 1,)
+Ground = Tile.Tile("Ground", (34, 139, 34), ("Water",)) #(1, 1,)
+
+def water_placement(matrix: mm.Matrix, coordinate: mm.Coordinate,
+                    humidity, set_of_value: dict={Water: 1}):
     """
     Place des zones d'eau de départ
     humidity --> nombres de point d'eau aux départs
@@ -22,7 +33,7 @@ def water_placement(matrix: mm.Matrix, coordinate: mm.Coordinate, humidity,
         coord = ran.choice(coordinate)
         coords_water.append(coord)
         coordinate.remove(coord)
-    matrix = mm.matrix_change(matrix, coords_water, {Water: 1})
+    matrix = mm.matrix_change(matrix, coords_water, set_of_value)
     return (coordinate, matrix, coords_water)
 
 
@@ -49,7 +60,7 @@ def w_f_c_evolved(matrix: mm.Matrix, water_p_val: int,
                                 ran_wal_value[0], ran_wal_value[1],
                                 ran_wal_value[2])
     
-    for p in COORDINATES:
+    for p in COORDINATES: #todo
         matrix = mm.in_concact(matrix, p, Water, Coast, Water)
         if matrix[p[0]][p[1]] != Water and  matrix[p[0]][p[1]] != Coast:
             matrix[p[0]][p[1]] = Ground
@@ -120,38 +131,6 @@ def condition(matrix: mm.Matrix, cell):
         
         matrix[cell1[0][0]][cell1[0][1]] = {tile: count for tile, count in cell1[1].items() if tile.Name not in cell.wfc_delete}                
         
-            
-@dataclass(eq=True, frozen=True)
-class Tile:
-    """
-    Classe représentant les différents types de terrains
-    Name --> Nom
-    Colour --> couleur par laquelle le terrain va être représenté (systèem RGB)
-    wfc_delete --> terrain qui ne peuvent pas être à côté (conectivité 4)
-    """
-    
-    Name: str
-    Color: tuple[int, int, int] = dc.field(default_factory=tuple[int, int, int])
-    wfc_delete: tuple = dc.field(default_factory=tuple)
-    #wealth: float will add if time and if Albert
-    #wildness: float will add if time and if Albert
-    
-    def __repr__(self):
-        return self.Name[0]
-
-
-Placeholer = Tile("Placeholer", (255, 255, 255), (),) #(0, 0,)
-Plain = Tile("Plain", (124, 252, 0), ("Sea", "River")) #(1, 1,)
-Mountain = Tile("Mountain", (139, 137, 137), ("Sea", "River")) #(0.25, 10,)
-Forest = Tile("Forest", (34, 139, 34), ("Sea", "Desert", "River")) #(1.25, 5,)
-Sea = Tile("Sea", (28, 107, 160), ("Plain", "Mountain", "Forest", "Desert")) #(0, 10000,)
-River = Tile("River", (70, 130, 180), ("Plain", "Mountain", "Forest")) #(0, 3,)
-Desert = Tile("Desert", (237, 201, 175), ("Sea", "Forest")) #(0.1, 0.5,)
-
-#obligatoire pour w_f_c_evolved
-Water = Tile("Water",  (70, 130, 180), ("Ground",)) #(1, 1,)
-Coast = Tile("Coast", (237, 201, 175), ()) #(1, 1,)
-Ground = Tile("Ground", (34, 139, 34), ("Water",)) #(1, 1,)
 
 if __name__ == "__main__":
     
@@ -160,7 +139,7 @@ if __name__ == "__main__":
                                                      Forest:2, Desert:2,
                                                      Sea:1, River:2}))
     
-    b = w_f_c_evolved(mm.create_matrix((10, 10), {Water:1, Ground:1, Coast:1}),
+    b = w_f_c_evolved(mm.create_matrix((10, 10), {}),
                       5, [25, 1, Water])
     
     print('\n'.join([str(i) for i in b]))
