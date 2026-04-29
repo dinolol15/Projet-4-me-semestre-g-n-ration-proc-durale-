@@ -11,7 +11,7 @@ import random as ran
 import matrix_manager as mm
 
 
-def water_placement(matrix, coordinate: mm.Coordinate, humidity):
+def water_placement(matrix: mm.Matrix, coordinate: mm.Coordinate, humidity):
     """
     Place des zones d'eau de départ
     humidity --> nombres de point d'eau aux départs
@@ -25,7 +25,7 @@ def water_placement(matrix, coordinate: mm.Coordinate, humidity):
     return (coordinate, matrix, coords_water)
 
 
-def w_f_c_evolved(matrix, water_p_val: int, ran_wal_value: tuple[int, int, object], humidity: int=1):
+def w_f_c_evolved(matrix: mm.Matrix, water_p_val: int, ran_wal_value: tuple[int, int, object], humidity: int=1):
     """
     Retourne une matrix générée avec un wfc simplifié
 
@@ -57,7 +57,7 @@ def w_f_c_evolved(matrix, water_p_val: int, ran_wal_value: tuple[int, int, objec
     return matrix
 
 
-def w_f_c_simplified(matrix):
+def w_f_c_simplified(matrix: mm.Matrix):
     """
     Retourne une matrix générée avec un wfc simplifié
 
@@ -88,7 +88,7 @@ def w_f_c_simplified(matrix):
     return matrix
 
 
-def condition(matrix, cell):
+def condition(matrix: mm.Matrix, cell):
     """
     Enlève les possibilitées impossibles avec l'argument wfc_delete
 

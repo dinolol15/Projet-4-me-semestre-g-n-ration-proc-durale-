@@ -12,7 +12,8 @@ import random as ran
 from typing import TypeAlias
 
 Position: TypeAlias = tuple[int, int]
-Coordinate: TypeAlias = list[Position, ]
+Coordinate: TypeAlias = list[Position,]
+Matrix: TypeAlias = list[list[object, ...],]
 
 def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -> list:
     """
@@ -23,7 +24,7 @@ def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -
     return [[element for j in range(dim[1])] for i in range(dim[0])]
 
 
-def up(matrix, position: Position):
+def up(matrix: Matrix, position: Position):
     """
     Retourne la position et la valeur d'une cellule en haut d'une cellule
     position[0] --> axe -y
@@ -35,7 +36,7 @@ def up(matrix, position: Position):
             matrix[position[0] - 1][position[1]])
     
 
-def down(matrix, position: Position):
+def down(matrix: Matrix, position: Position):
     """
     Retourne la position et la valeur d'une cellule en bas d'une cellule
     position[0] --> axe -y
@@ -47,7 +48,7 @@ def down(matrix, position: Position):
             matrix[position[0] + 1][position[1]])
     
     
-def right(matrix, position: Position):
+def right(matrix: Matrix, position: Position):
     """
     Retourne la position et la valeur d'une cellule à droite d'une cellule
     position[0] --> axe -y
@@ -59,7 +60,7 @@ def right(matrix, position: Position):
             matrix[position[0]][position[1] + 1])
 
     
-def left(matrix, position: Position):
+def left(matrix: Matrix, position: Position):
     """
     Retourne la position et la valeur d'une cellule à gauche d'une cellule
     position[0] --> axe -y
@@ -70,7 +71,7 @@ def left(matrix, position: Position):
     return ((position[0], position[1] - 1),
             matrix[position[0]][position[1] - 1])
 
-def random_cell(matrix, coordinate: Coordinate = None):
+def random_cell(matrix: Matrix, coordinate: Coordinate = None):
     """
     Retourne la valeur et la position aléatoire
     d'une cellule cellule aléatoire d'une matrice
@@ -94,7 +95,7 @@ def random_cell(matrix, coordinate: Coordinate = None):
         return ran_cell(matrix, coordinate)
 
 
-def lobject_cell(matrix, coordinate: Coordinate = None):
+def lobject_cell(matrix: Matrix, coordinate: Coordinate = None):
     """
     Retourne la valeur et la position aléatoire
     de la cellule avec le moins d'éléments dans la matrice
@@ -127,7 +128,7 @@ def lobject_cell(matrix, coordinate: Coordinate = None):
     else:
         return ob_cell(matrix, coordinate)
 
-def matrix_change(matrix, coordinate: Coordinate, dict_val : dict):
+def matrix_change(matrix: Matrix, coordinate: Coordinate, dict_val : dict):
     """
     Donne une valeur parmiuns liste de valeur
     à une matrice sur une série de coordonnées
@@ -137,7 +138,7 @@ def matrix_change(matrix, coordinate: Coordinate, dict_val : dict):
     return matrix
 
 
-def fill(matrix, position_cell : Position):
+def fill(matrix: Matrix, position_cell : Position):
     """
     Regarde si une cellule est entourée de cellule de la même valeur
     le cas échéant, donne la même valeur à la cellule
@@ -168,7 +169,7 @@ def fill(matrix, position_cell : Position):
     return matrix
 
             
-def random_walk(matrix, starting_pos: Coordinate, steps: int, max_lenght: int, value: object):        
+def random_walk(matrix: Matrix, starting_pos: Coordinate, steps: int, max_lenght: int, value: object):        
         """
         Réalise l'algorythme de random walk
         """
@@ -194,7 +195,7 @@ def random_walk(matrix, starting_pos: Coordinate, steps: int, max_lenght: int, v
         return matrix
                 
 
-def in_concact(matrix, position_cell: Position, value_desired: object, value_given: object, except_value: object):
+def in_concact(matrix: Matrix, position_cell: Position, value_desired: object, value_given: object, except_value: object):
     """
     Regarde si une cellule est en contact
     d'une cellule d'une certaine valeur
