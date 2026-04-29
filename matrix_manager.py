@@ -12,7 +12,7 @@ import random as ran
 from typing import TypeAlias
 
 Position: TypeAlias = tuple[int, int]
-
+Coordinate: TypeAlias = list[Position, ]
 
 def create_matrix(dim: tuple[int, int] | list[int, int], element : object = 0) -> list:
     """
@@ -70,7 +70,7 @@ def left(matrix, position: Position):
     return ((position[0], position[1] - 1),
             matrix[position[0]][position[1] - 1])
 
-def random_cell(matrix, coordinate = None):
+def random_cell(matrix, coordinate: Coordinate = None):
     """
     Retourne la valeur et la position aléatoire
     d'une cellule cellule aléatoire d'une matrice
@@ -94,7 +94,7 @@ def random_cell(matrix, coordinate = None):
         return ran_cell(matrix, coordinate)
 
 
-def lobject_cell(matrix, coordinate = None):
+def lobject_cell(matrix, coordinate: Coordinate = None):
     """
     Retourne la valeur et la position aléatoire
     de la cellule avec le moins d'éléments dans la matrice
@@ -127,7 +127,7 @@ def lobject_cell(matrix, coordinate = None):
     else:
         return ob_cell(matrix, coordinate)
 
-def matrix_change(matrix, coordinate, dict_val : dict):
+def matrix_change(matrix, coordinate: Coordinate, dict_val : dict):
     """
     Donne une valeur parmiuns liste de valeur
     à une matrice sur une série de coordonnées
@@ -168,7 +168,7 @@ def fill(matrix, position_cell : Position):
     return matrix
 
             
-def random_walk(matrix, starting_pos: tuple, steps: int, max_lenght: int, value: object):        
+def random_walk(matrix, starting_pos: Coordinate, steps: int, max_lenght: int, value: object):        
         """
         Réalise l'algorythme de random walk
         """

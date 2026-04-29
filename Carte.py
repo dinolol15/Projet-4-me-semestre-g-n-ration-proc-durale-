@@ -11,21 +11,21 @@ import random as ran
 import matrix_manager as mm
 
 
-def water_placement(matrix, coords, humidity):
+def water_placement(matrix, coordinate: mm.Coordinate, humidity):
     """
     Place des zones d'eau de départ
     humidity --> nombres de point d'eau aux départs
     """
     coords_water = []
     for _ in range(humidity):
-        coord = ran.choice(coords)
+        coord = ran.choice(coordinate)
         coords_water.append(coord)
-        coords.remove(coord)
+        coordinate.remove(coord)
     matrix = mm.matrix_change(matrix, coords_water, {Water: 1})
-    return (coords, matrix, coords_water)
+    return (coordinate, matrix, coords_water)
 
 
-def w_f_c_evolved(matrix, water_p_val: int, ran_wal_value: [int, int, object], humidity: int=1):
+def w_f_c_evolved(matrix, water_p_val: int, ran_wal_value: tuple[int, int, object], humidity: int=1):
     """
     Retourne une matrix générée avec un wfc simplifié
 
