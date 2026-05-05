@@ -9,6 +9,7 @@ import random as ran
 from typing import TypeAlias, cast, TypeVar
 
 T = TypeVar("T")
+U = TypeVar("U")
 
 Position: TypeAlias = tuple[int, int]
 Coordinate: TypeAlias = list[Position]
@@ -144,7 +145,7 @@ def lobject_cell(
         return ob_cell(matrix, coordinate)
 
 
-def matrix_change(matrix: Matrix[T], coordinate: Coordinate, dict_val: dict[T, int]) -> Matrix[T]:
+def matrix_change(matrix: Matrix[T | U], coordinate: Coordinate, dict_val: dict[U, int]) -> Matrix[T | U]:
     """
     Donne une valeur parmi une liste de valeur
     à une matrice sur une série de coordonnées
