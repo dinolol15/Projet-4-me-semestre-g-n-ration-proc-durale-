@@ -41,7 +41,6 @@ def on_key_press(symbol, modifier):
                                            batch=batch 
                                            )
                 shapes.append(cell)
-        print(shapes)
     if symbol == key.B:
         r = ran.choice(shapes)
         r.delete()
