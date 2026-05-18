@@ -45,7 +45,7 @@ Feat. Gemini AI, I'm sorry Adrian but I had to be efficient
 That being said, that wasn't vibe code, just that I copied the snippets of code like a blueprint of a button to keep a
 consistent design of windows
 """
-def copy_win(copy_text: bytes):
+def copy_win(copy_text: bytes, dim: tuple[int, int]):
 
     #if text too long to be on the screen
     show_text = str(copy_text)
@@ -114,7 +114,7 @@ def copy_win(copy_text: bytes):
         def write_file():
             respp = messagebox.askyesno("SAVING", "You sure you wanna save your file?")
             if respp:
-                sd.write_file(file_path, copy_text)
+                sd.write_file(file_path, copy_text, dim)
                 ui_feedback(1)
             else:
                 ui_feedback(0)
@@ -211,8 +211,9 @@ def import_project(getter: list):
             import_button.config(text=f"Select something please", bg="red", fg="white", state="normal")
         else:
             path = saves[select]
-            file: bytes = sd.read_file(path)
+            file, dim = sd.read_file(path)
             getter.append(file)
+            getter.append(dim)
             popup.destroy()
             root.destroy()
 
@@ -348,9 +349,7 @@ def create_new_map() -> tuple[int, int, bytes]:
     dimension_frame = tk.Frame(root)
     dimension_frame.pack(padx=10)
 
-    dim_l_x = tk.Label(dimension_frame, text="X dimension:", font=("Arial", 11), wraplength=300)
-    dim_l_y = tk.Label(dimension_frame, text="Y dimension:", font=("Arial", 11), wraplength=300)
-    dim_l_space = tk.Label(dimension_frame, text="     ", font=("Arial", 11), wraplength=300)
+    dim_l_x = tk.Label(dimension_frame, text="XY dimension (square):", font=("Arial", 11), wraplength=300)
 
     #for entries, check if digit typed, if not then do not place character
     def validate_integer(action, value_if_allowed):
@@ -364,16 +363,13 @@ def create_new_map() -> tuple[int, int, bytes]:
     vcmd = (root.register(validate_integer), '%d', '%P')
 
     #dimensions
-    dim_e_x = tk.Entry(dimension_frame, width=10, validate='key', validatecommand=vcmd)
+    dim_e_x = tk.Entry(dimension_frame, width=30, validate='key', validatecommand=vcmd)
     dim_e_x.insert(0, "100")
-    dim_e_y = tk.Entry(dimension_frame, width=10, validate='key', validatecommand=vcmd)
+    dim_e_y = tk.Entry(dimension_frame, width=30, validate='key', validatecommand=vcmd)
     dim_e_y.insert(0, "100")
 
     dim_l_x.grid(row=0, column=0)
     dim_e_x.grid(row=0, column=1)
-    dim_l_space.grid(row=0, column=2)
-    dim_l_y.grid(row=0, column=3)
-    dim_e_y.grid(row=0, column=4)
 
     #humidity
     wet_frame = Frame(root)
@@ -441,7 +437,7 @@ def create_new_map() -> tuple[int, int, bytes]:
     #in here is the summary of all my guesswork about what all the arguments in Adrien's masterpiece mean
     def on_close():
         global map_data
-        mtx = mm.create_matrix((int(dim_e_x.get()), int(dim_e_y.get())),{"baba": 2})
+        mtx = mm.create_matrix((int(dim_e_x.get()), int(dim_e_x.get())),{"baba": 2})
         wpv = int(waterpval_slider.get())
         rw = [int(rw_e1.get()), int(rw_e2.get()), Carte.Water]
         hmdt = int(wet_slider.get())
