@@ -2,13 +2,12 @@
 """
 First docstring in my life duh
 
-Program that lets you manually draw a map for the game, the main project
+Projet de base, modificateur de maps
 """
 
 import functools
-import gc
-from copy import deepcopy
-from typing import Callable, Literal
+
+from typing import Callable
 import copy
 
 
@@ -231,6 +230,7 @@ def main():
             elif cam.mouse_left and current == "eraser":
                 tangent_drawing(x, y, dx, dy, (0, 0, 0))
 
+    #draw point accordingly to the pen size
     def draw_square(x: int, y: int, rgb):
         size = drawing_size
         memo.edit_point(x, y, rgb) #center
@@ -248,17 +248,18 @@ def main():
                     memo.edit_point(xp, yp, rgb)
                 d *= -1
 
+    #the worse per-frame version of drawing
     def point_drawing(x: int, y: int):
-        max_id = map_size
         xx, yy = mouse_pos_viewport_transform(x, y)
         x_id, y_id = find_mouse_id(xx, yy)
         draw_square(x_id, y_id, drawing_color)
 
+    #draw lines instead of points (better draw)
     def tangent_drawing(x, y, dx, dy, rgb: rgb_type):
-        X1, Y1 = mouse_pos_viewport_transform(x - dx, y - dy)
-        X2, Y2 = mouse_pos_viewport_transform(x, y)
-        x1_id, y1_id = find_mouse_id(X1, Y1)
-        x2_id, y2_id = find_mouse_id(X2, Y2)
+        x1, y1 = mouse_pos_viewport_transform(x - dx, y - dy)
+        x2, y2 = mouse_pos_viewport_transform(x, y)
+        x1_id, y1_id = find_mouse_id(x1, y1)
+        x2_id, y2_id = find_mouse_id(x2, y2)
 
         # number of tiles in between + the sign
         dx_id_s = x2_id - x1_id
@@ -279,7 +280,6 @@ def main():
                 dx_s = int(dx_id / (x2_id - x1_id))
                 for i in range(0, (dx_id + 1) * dx_s, dx_s):
                     r[x1_id + i] = y1_id
-
         else:
             dx_s = int(dx_id / (x2_id - x1_id))
             dy_s = int(dy_id / (y2_id - y1_id))
@@ -296,35 +296,38 @@ def main():
         for i in r.keys():
             xx = i
             yy = r[i]
-            max_id = map_size
             draw_square(xx, yy, rgb)
 
+    #tile lenght on screen
     def tile_len():
         return s.tile_size / cam.zoom_scale
 
+    #illegal according to pycharm, access to mouse pos
     def mouse_pos():
         return cam.window._mouse_x, cam.window._mouse_y
 
+    #mouse position on screen (relative to in-game)
     def mouse_pos_viewport():
         x = cam.pos_x + (cam.window._mouse_x - cam.window_center[0]) / cam.zoom_scale
         y = cam.pos_y + (cam.window._mouse_y - cam.window_center[1]) / cam.zoom_scale
         return x, y
 
+    #the same thing as the one above but I kept it out of personal sentiment as a relic of the past
     def mouse_pos_viewport_transform(mx, my):
         x = cam.pos_x + (mx - cam.window_center[0]) / cam.zoom_scale
         y = cam.pos_y + (my - cam.window_center[1]) / cam.zoom_scale
         return x, y
 
-
+    #gets the tile on which the mouse currently is (i.e. the tile of the map you draw upon)
     def find_mouse_id(x, y):
         t_len = tile_len()
         dc = s.downside_corner
-
         x_id = int(math.floor((x - dc[0]) / t_len))
         y_id = int(math.floor((y - dc[1]) / t_len))
 
         return x_id, y_id
 
+    #the loop of pyglet and the start of globals apocalypse
     def update(dt):
         global SYSTEM_PAUSE
         global map_size
@@ -394,7 +397,9 @@ def main():
                 global map_size
                 new_dim_x, new_dim_y, new = SomeTK.create_new_map()
                 map_size = (new_dim_x, new_dim_y)
-                #--------------------------------------------
+                #reinitialize map after re-creation -----------------------------------------
+                #fun fact, the function below was designed 2 months ago in anticipation of this very situation
+                #basically you need to create a new pyglet.image.ImageData to refresh its values
                 s.update_data_values(map_dimensions=map_size, map_pixel_size=tile_size)
                 memo.max_id = map_size
                 memo.reinit()
@@ -406,7 +411,7 @@ def main():
             elif n == 6: #get some help
                 print("Stop it, get some help.")
 
-            elif n == 666: #reinit
+            elif n == 666: #reinit the whole map
                 SYSTEM_PAUSE = True
                 def reinit_func():
                     s.pixel_array = initial_map_data
@@ -414,7 +419,7 @@ def main():
                 SomeTK.reinit(reinit_func)
                 SYSTEM_PAUSE = False
 
-
+        #selection of tools on the toolbal
         if cam.mouse_left:
             if mouse_pos()[0] < 50 and toolbar_range[0] < mouse_pos()[1] < toolbar_range[1]:
                 obj = math.floor((toolbar_range[1] - mouse_pos()[1]) / 50.0)
@@ -447,6 +452,7 @@ def main():
         if cam.keys[key.D]:
             toolbar_action(1)
 
+    #main pyglet loop
     pyglet.clock.schedule_interval(update, 1/60.0)
     pyglet.app.run()
 

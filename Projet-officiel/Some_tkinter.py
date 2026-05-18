@@ -2,34 +2,29 @@
 """
 Tkinter stuff for popups and saving files
 by Albert S
+
+From top to bottom you may see a whole adventure of me discovering different method of yielding results while handling
+tkinter widows at the same time
 """
 
 
 import tkinter as tk
-
 from tkinter import messagebox, Frame
 from tkinter import ttk
-# from typing import TYPE_CHECKING
-
-
-import savedata as sd
 
 from collections.abc import Callable
 
+import savedata as sd
 import os
 
 #adrien things
 import Carte
-from collections import Counter
-import random as ran
 import matrix_manager as mm
-from matrix_manager import Position, Matrix, set, get
-from Tile import Tile, placeholder
 
 import Convertisseur as cnv
 
 
-
+#a simple reinitalization window
 def reinit(exe: Callable):
     print("reinitialize")
     ttl = "WARNING: USE YOUR BRAIN AND READ THIS"
@@ -41,11 +36,18 @@ def reinit(exe: Callable):
     else:
         print("reinit aborted")
 
+
+
 TEXT_DESC = "Congrats on your brand new project! You can copy the data of your map with the following button:"
 
-#feat. Gemini AI
+"""
+Feat. Gemini AI, I'm sorry Adrian but I had to be efficient
+That being said, that wasn't vibe code, just that I copied the snippets of code like a blueprint of a button to keep a
+consistent design of windows
+"""
 def copy_win(copy_text: bytes):
-    #if too long
+
+    #if text too long to be on the screen
     show_text = str(copy_text)
     if len(show_text) > 50:
         show_text = show_text[:49] + "[...]"
@@ -55,10 +57,11 @@ def copy_win(copy_text: bytes):
     root.geometry("700x500")
     root.withdraw()
 
+    #second popup window, in case I had an idea to add something before
     popup = tk.Toplevel(root)
     popup.title("Saving Project")
 
-    # Make the popup appear centered relative to the main window
+    #so to make the popup appear centered relative to the main window
     popup.geometry("500x500")
 
     def on_popup_close():
@@ -87,9 +90,10 @@ def copy_win(copy_text: bytes):
         root.clipboard_clear()
         root.clipboard_append(str(copy_text))
 
-        # UI feedback
+        #UI feedback
         copy_button.config(text="Copied!", bg="#4CAF50", fg="white", state="disabled")
 
+    #function to save the said file inside a folder to read it later
     def save_file_action():
         main = "Projet-officiel"
         save_path = "Save_files"
@@ -100,12 +104,12 @@ def copy_win(copy_text: bytes):
         file_name = writing.get()
         file_path = os.path.join(save_path, file_name)
 
+        #button color change
         def ui_feedback(mode: int = 0):
             if mode == 0:
                 save_file_button.config(text=f"File not saved...", bg="#4CAF50", fg="white", state="normal")
             else:
                 save_file_button.config(text=f"Saved {file_name}!", bg="#4CAF50", fg="white", state="disabled")
-
 
         def write_file():
             respp = messagebox.askyesno("SAVING", "You sure you wanna save your file?")
@@ -114,7 +118,6 @@ def copy_win(copy_text: bytes):
                 ui_feedback(1)
             else:
                 ui_feedback(0)
-
 
         if os.path.exists(file_path):
             resp = messagebox.askyesno("WARNING: OVERWRITING SAVE",
@@ -141,6 +144,7 @@ def copy_win(copy_text: bytes):
         pady=5
     )
     copy_button.grid(row=0, column=0)
+
     #file create button
     save_file_button = tk.Button(
         buttons_frame,
@@ -167,11 +171,10 @@ def import_project(getter: list):
     popup = tk.Toplevel(root)
     popup.title("Importing Project")
 
-    # Make the popup appear centered relative to the main window
     popup.geometry("500x200")
 
     def on_popup_close():
-        # Destroying root will close the popup and exit the entire application
+        #destroying popup closes the root and exits the application
         root.destroy()
     popup.protocol("WM_DELETE_WINDOW", on_popup_close)
 
@@ -192,7 +195,6 @@ def import_project(getter: list):
         if not len(save_files) == 0:
             return save_files
         else:
-            print("nutn")
             return {}
 
     saves = get_save_files() # ["file1", "file2", "file3"]
@@ -227,8 +229,9 @@ def import_project(getter: list):
 
     root.mainloop()
 
-def drawing_settings():
 
+#pen settings tk interface
+def drawing_settings():
     chosen_tile = ["#000000"]
     drawing_size = [1]
 
@@ -360,9 +363,7 @@ def create_new_map() -> tuple[int, int, bytes]:
 
     vcmd = (root.register(validate_integer), '%d', '%P')
 
-
     #dimensions
-
     dim_e_x = tk.Entry(dimension_frame, width=10, validate='key', validatecommand=vcmd)
     dim_e_x.insert(0, "100")
     dim_e_y = tk.Entry(dimension_frame, width=10, validate='key', validatecommand=vcmd)
@@ -375,7 +376,6 @@ def create_new_map() -> tuple[int, int, bytes]:
     dim_e_y.grid(row=0, column=4)
 
     #humidity
-
     wet_frame = Frame(root)
     wet_frame.pack(pady=10)
 
@@ -398,7 +398,6 @@ def create_new_map() -> tuple[int, int, bytes]:
     frame2.pack(pady=10)
 
     #n rivers start points
-
     waterpval_label = tk.Label(frame2, text="Number of rivers:  ", font=("Arial", 11), wraplength=300)
 
     waterpval_slider = tk.Scale(
@@ -424,7 +423,7 @@ def create_new_map() -> tuple[int, int, bytes]:
     rw_e2 = tk.Entry(frame3, width=10, validate='key', validatecommand=vcmd)
     rw_e2.insert(0, "3")
 
-    rw_tiles:dict = {
+    rw_tiles: dict = {
         "Water": Carte.Water,
         "Ground": Carte.Ground,
         "Coast": Carte.Coast,
@@ -439,6 +438,7 @@ def create_new_map() -> tuple[int, int, bytes]:
     rw_e2.grid(row=0, column=2)
     rw_tile_dropdown.grid(row=0, column=3)
 
+    #in here is the summary of all my guesswork about what all the arguments in Adrien's masterpiece mean
     def on_close():
         global map_data
         mtx = mm.create_matrix((int(dim_e_x.get()), int(dim_e_y.get())),{"baba": 2})
@@ -446,8 +446,8 @@ def create_new_map() -> tuple[int, int, bytes]:
         rw = [int(rw_e1.get()), int(rw_e2.get()), Carte.Water]
         hmdt = int(wet_slider.get())
 
-        #matrix, water_p_val, rw, humidity
-        map_data = Carte.w_f_c_evolved(mtx, wpv, rw, hmdt)
+        #matrix, river points, random walk list, humidity
+        map_data = Carte.w_f_c_evolved(mtx, wpv, rw, hmdt) #some typing problems here...
         root.destroy()
 
     generate_button = tk.Button(
@@ -462,9 +462,10 @@ def create_new_map() -> tuple[int, int, bytes]:
     generate_button.pack(pady=20)
 
     root.mainloop()
+    #after that is the returning part
 
+    #this converts the gotten map into bytes that can be directly put into a SquareMap
     global map_data
-
     try:
         map_data_colors = []
         for y in map_data:
@@ -472,14 +473,8 @@ def create_new_map() -> tuple[int, int, bytes]:
             for x in y:
                 cc.append(x.Color)
             map_data_colors.append(cc)
-
-        print(map_data_colors)
-
         map_data_bytes = cnv.convertisseur_tryhard(map_data_colors)
-
-        print(map_data_bytes)
         return len(map_data[0]), len(map_data), map_data_bytes
-
-    except:
+    except: #no idea what error it yields, sometimes it does that's for sure
         return 0, 0, b""
 
