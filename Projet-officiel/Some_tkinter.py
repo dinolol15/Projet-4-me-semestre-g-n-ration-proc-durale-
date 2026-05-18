@@ -18,8 +18,15 @@ from collections.abc import Callable
 
 import os
 
+#adrien things
 import Carte
+from collections import Counter
+import random as ran
+import matrix_manager as mm
+from matrix_manager import Position, Matrix, set, get
+from Tile import Tile, placeholder
 
+import Convertisseur as cnv
 
 
 
@@ -236,20 +243,11 @@ def drawing_settings():
     choices_frame.pack(pady=10)
 
     def on_select():
-        # Grab the value of the currently selected option
+        #grab the value of the currently selected option
         selected_value = selection_var.get()
         chosen_tile[0] = data_on_select[selected_value]
 
-    # 1. Create a single tracking variable (StringVar) for the whole group
-    selection_var = tk.StringVar(value="Blue Theme")  # Sets "Blue Theme" as default
-
-    """
-    Water = Tile("Water", , [])  # (1, 1,)
-    Coast = Tile("Coast", (237, 201, 175), [])  # (1, 1,)
-    Ground = Tile("Ground", (34, 139, 34), [])  # (1, 1,)
-    """
-
-    # 2. Define the data for our choices: (Display Text, Hex Color Code)
+    selection_var = tk.StringVar(value="Blue Theme")
 
     blue = "#{:02x}{:02x}{:02x}".format(*(70, 130, 180))
     yellow = "#{:02x}{:02x}{:02x}".format(*(237, 201, 175))
@@ -264,15 +262,13 @@ def drawing_settings():
 
     data_on_select: dict = {}
 
-    # 3. Loop through the data to build the rows dynamically
+    #create unique choice buttons
     for text, color in options:
         data_on_select[text] = color
-        # A horizontal frame to keep the row neat
         row = tk.Frame(choices_frame)
         row.pack(fill="x", padx=30, pady=5)
 
-        # A. The Radiobutton
-        # They all share 'variable=selection_var', but each has a unique 'value'
+
         rb = tk.Radiobutton(
             row,
             text=text,
@@ -283,12 +279,10 @@ def drawing_settings():
         )
         rb.pack(side="left")
 
-        # B. A tiny spacer frame to create a gap between text and color box
         tk.Frame(row, width=15).pack(side="left")
 
-        # C. The Colored Square
         color_square = tk.Frame(row, bg=color, width=16, height=16, bd=1, relief="solid")
-        color_square.pack_propagate(False)  # Prevent the square from collapsing
+        color_square.pack_propagate(False)  #prevent the square from collapsing
         color_square.pack(side="left")
 
     size_label = tk.Label(root, text="Set the size of the pen:")
@@ -299,11 +293,11 @@ def drawing_settings():
 
     slider = tk.Scale(
         root,
-        from_=1,  # 'from' has an underscore because 'from' is a Python keyword
+        from_=1,
         to=5,
         orient="horizontal",
         command=on_slide,
-        length=200  # Width of the slider in pixels
+        length=200
     )
     slider.pack(pady=0)
 
@@ -336,11 +330,14 @@ def drawing_settings():
 
     return rgb_tuple, final_draw_size
 
-def create_new_map():
+
+global map_data#will be returned later
+
+def create_new_map() -> tuple[int, int, bytes]:
 
     root = tk.Tk()
-    root.title("Main Application")
-    root.geometry("400x500")
+    root.title("Generate new map")
+    root.geometry("500x350")
 
     label = tk.Label(root, text="Select your settings to create a new map:", font=("Arial", 10), wraplength=300)
     label.pack(pady=(30, 5))
@@ -367,9 +364,9 @@ def create_new_map():
     #dimensions
 
     dim_e_x = tk.Entry(dimension_frame, width=10, validate='key', validatecommand=vcmd)
-    dim_e_x.insert(0, "0")
+    dim_e_x.insert(0, "100")
     dim_e_y = tk.Entry(dimension_frame, width=10, validate='key', validatecommand=vcmd)
-    dim_e_y.insert(0, "0")
+    dim_e_y.insert(0, "100")
 
     dim_l_x.grid(row=0, column=0)
     dim_e_x.grid(row=0, column=1)
@@ -395,6 +392,7 @@ def create_new_map():
 
     wet_label.grid(row=0, column=0)
     wet_slider.grid(row=0, column=1)
+    wet_slider.set(6)
 
     frame2 = Frame(root)
     frame2.pack(pady=10)
@@ -411,6 +409,7 @@ def create_new_map():
         command=None,
         length=200
     )
+    waterpval_slider.set(5)
 
     waterpval_label.grid(row=0, column=0)
     waterpval_slider.grid(row=0, column=1)
@@ -421,18 +420,66 @@ def create_new_map():
     rw_label = tk.Label(frame3, text="Random walk values(?):  ", font=("Arial", 11), wraplength=300)
 
     rw_e1 = tk.Entry(frame3, width=10, validate='key', validatecommand=vcmd)
+    rw_e1.insert(0, "20")
     rw_e2 = tk.Entry(frame3, width=10, validate='key', validatecommand=vcmd)
+    rw_e2.insert(0, "3")
 
     rw_tiles:dict = {
         "Water": Carte.Water,
         "Ground": Carte.Ground,
         "Coast": Carte.Coast,
     }
-    rw_tiles_choices = []
+    rw_tiles_choices = ["Water", "Ground", "Coast"]
 
-    rw_tile_dropdown = dropdown = ttk.Combobox(frame3, values=rw_tiles_choices, state="readonly", font=("Arial", 10))
+    rw_tile_dropdown = ttk.Combobox(frame3, values=rw_tiles_choices, state="readonly", font=("Arial", 10), width=10)
+    rw_tile_dropdown.set("Water")
 
+    rw_label.grid(row=0, column=0)
+    rw_e1.grid(row=0, column=1)
+    rw_e2.grid(row=0, column=2)
+    rw_tile_dropdown.grid(row=0, column=3)
+
+    def on_close():
+        global map_data
+        mtx = mm.create_matrix((int(dim_e_x.get()), int(dim_e_y.get())),{"baba": 2})
+        wpv = int(waterpval_slider.get())
+        rw = [int(rw_e1.get()), int(rw_e2.get()), Carte.Water]
+        hmdt = int(wet_slider.get())
+
+        #matrix, water_p_val, rw, humidity
+        map_data = Carte.w_f_c_evolved(mtx, wpv, rw, hmdt)
+        root.destroy()
+
+    generate_button = tk.Button(
+        root,
+        text="Generate!",
+        command=on_close,
+        bg="#0078D4",
+        fg="white",
+        padx=10,
+        pady=5
+    )
+    generate_button.pack(pady=20)
 
     root.mainloop()
 
-create_new_map()
+    global map_data
+
+    try:
+        map_data_colors = []
+        for y in map_data:
+            cc = []
+            for x in y:
+                cc.append(x.Color)
+            map_data_colors.append(cc)
+
+        print(map_data_colors)
+
+        map_data_bytes = cnv.convertisseur_tryhard(map_data_colors)
+
+        print(map_data_bytes)
+        return len(map_data[0]), len(map_data), map_data_bytes
+
+    except:
+        return 0, 0, b""
+

@@ -6,6 +6,8 @@ Program that lets you manually draw a map for the game, the main project
 """
 
 import functools
+import gc
+from copy import deepcopy
 from typing import Callable, Literal
 import copy
 
@@ -51,6 +53,10 @@ class PointMemory:
     def __post_init__(self):
         self.memory: list[PointMemory.Cell] = []
         self.memory_step: int = -1
+
+    def reinit(self):
+        self.memory = []
+        self.memory_step = -1
 
     #debuggers ---------------------------
     @staticmethod
@@ -118,6 +124,7 @@ class PointMemory:
             c = self.memory[self.memory_step].get_info()
             self.ref.set_pixel((c[0], c[1]), c[3])
 
+
 #globals --------------------------------------
 current = "draw"
 SYSTEM_PAUSE = False
@@ -126,15 +133,22 @@ drawing_mode = "tangent"
 drawing_color = (0, 0, 0)
 drawing_size = 1
 
+map_size = (50, 50)
+tile_size = 4
+map_base_size = 5.0
+
+global s
+
 def main():
     global SYSTEM_PAUSE
     global drawing_color
     global drawing_size
 
-    map_size = (50, 50)
-    tile_size = 4
-    map_base_size = 5.0
+    global map_size
+    global tile_size
+    global map_base_size
 
+    global s
 
     cam = Camera((1000, 1000))
     cam.debug_ui()
@@ -313,6 +327,8 @@ def main():
 
     def update(dt):
         global SYSTEM_PAUSE
+        global map_size
+        global s
 
         dc = s.downside_corner
         t_len = tile_len()
@@ -333,6 +349,7 @@ def main():
         def toolbar_action(n: int):
             global current
             global SYSTEM_PAUSE
+            global s
 
             if n == 0: #draw tool
                 current = "draw"
@@ -344,6 +361,7 @@ def main():
 
             elif n == 2: #saving
                 SYSTEM_PAUSE = True
+                global s
                 print("save")
                 save_text = bytes(s.pixel_array)
                 SomeTK.copy_win(save_text)
@@ -372,7 +390,18 @@ def main():
                 SYSTEM_PAUSE = False
 
             elif n == 5: #new map
-                ...
+                SYSTEM_PAUSE = True
+                global map_size
+                new_dim_x, new_dim_y, new = SomeTK.create_new_map()
+                map_size = (new_dim_x, new_dim_y)
+                #--------------------------------------------
+                s.update_data_values(map_dimensions=map_size, map_pixel_size=tile_size)
+                memo.max_id = map_size
+                memo.reinit()
+                s.pixel_array = bytearray(new)
+                s.update_image()
+                SYSTEM_PAUSE = False
+
 
             elif n == 6: #get some help
                 print("Stop it, get some help.")
