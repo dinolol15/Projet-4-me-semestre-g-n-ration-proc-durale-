@@ -7,7 +7,7 @@ by Albert S
 
 import tkinter as tk
 
-from tkinter import messagebox
+from tkinter import messagebox, Frame
 from tkinter import ttk
 # from typing import TYPE_CHECKING
 
@@ -18,7 +18,7 @@ from collections.abc import Callable
 
 import os
 
-
+import Carte
 
 
 
@@ -335,3 +335,104 @@ def drawing_settings():
     final_draw_size = int(drawing_size[0])
 
     return rgb_tuple, final_draw_size
+
+def create_new_map():
+
+    root = tk.Tk()
+    root.title("Main Application")
+    root.geometry("400x500")
+
+    label = tk.Label(root, text="Select your settings to create a new map:", font=("Arial", 10), wraplength=300)
+    label.pack(pady=(30, 5))
+
+    dimension_frame = tk.Frame(root)
+    dimension_frame.pack(padx=10)
+
+    dim_l_x = tk.Label(dimension_frame, text="X dimension:", font=("Arial", 11), wraplength=300)
+    dim_l_y = tk.Label(dimension_frame, text="Y dimension:", font=("Arial", 11), wraplength=300)
+    dim_l_space = tk.Label(dimension_frame, text="     ", font=("Arial", 11), wraplength=300)
+
+    #for entries, check if digit typed, if not then do not place character
+    def validate_integer(action, value_if_allowed):
+        if action == '1':
+            if value_if_allowed.isdigit() or value_if_allowed == "":
+                return True
+            else:
+                return False
+        return True
+
+    vcmd = (root.register(validate_integer), '%d', '%P')
+
+
+    #dimensions
+
+    dim_e_x = tk.Entry(dimension_frame, width=10, validate='key', validatecommand=vcmd)
+    dim_e_x.insert(0, "0")
+    dim_e_y = tk.Entry(dimension_frame, width=10, validate='key', validatecommand=vcmd)
+    dim_e_y.insert(0, "0")
+
+    dim_l_x.grid(row=0, column=0)
+    dim_e_x.grid(row=0, column=1)
+    dim_l_space.grid(row=0, column=2)
+    dim_l_y.grid(row=0, column=3)
+    dim_e_y.grid(row=0, column=4)
+
+    #humidity
+
+    wet_frame = Frame(root)
+    wet_frame.pack(pady=10)
+
+    wet_label = tk.Label(wet_frame, text="Humidity:  ", font=("Arial", 11), wraplength=300)
+
+    wet_slider = tk.Scale(
+        wet_frame,
+        from_=1,
+        to=10,
+        orient="horizontal",
+        command=None,
+        length=200
+    )
+
+    wet_label.grid(row=0, column=0)
+    wet_slider.grid(row=0, column=1)
+
+    frame2 = Frame(root)
+    frame2.pack(pady=10)
+
+    #n rivers start points
+
+    waterpval_label = tk.Label(frame2, text="Number of rivers:  ", font=("Arial", 11), wraplength=300)
+
+    waterpval_slider = tk.Scale(
+        frame2,
+        from_=1,
+        to=20,
+        orient="horizontal",
+        command=None,
+        length=200
+    )
+
+    waterpval_label.grid(row=0, column=0)
+    waterpval_slider.grid(row=0, column=1)
+
+    frame3 = Frame(root)
+    frame3.pack(pady=10)
+
+    rw_label = tk.Label(frame3, text="Random walk values(?):  ", font=("Arial", 11), wraplength=300)
+
+    rw_e1 = tk.Entry(frame3, width=10, validate='key', validatecommand=vcmd)
+    rw_e2 = tk.Entry(frame3, width=10, validate='key', validatecommand=vcmd)
+
+    rw_tiles:dict = {
+        "Water": Carte.Water,
+        "Ground": Carte.Ground,
+        "Coast": Carte.Coast,
+    }
+    rw_tiles_choices = []
+
+    rw_tile_dropdown = dropdown = ttk.Combobox(frame3, values=rw_tiles_choices, state="readonly", font=("Arial", 10))
+
+
+    root.mainloop()
+
+create_new_map()

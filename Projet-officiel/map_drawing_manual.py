@@ -25,6 +25,7 @@ from ImageDisplay import ImageDisplay as Image
 from Camera import Camera
 
 
+
 def floored_to(x, n):
     return n*math.floor(x/n)
 
