@@ -6,20 +6,21 @@ Projet de base, modificateur de maps
 """
 
 import functools
+import math
+from dataclasses import dataclass
 
 from typing import Callable
 import copy
 
 
-import Some_tkinter as SomeTK
+import some_tkinter as SomeTK
 
 import pyglet
 from pyglet.window import key
-import math
 
-from dataclasses import dataclass
 
-type rgb_type = tuple[int, int, int]
+
+type RgbType = tuple[int, int, int]
 
 from SquareMap import SquareMap as Square
 from ImageDisplay import ImageDisplay as Image
@@ -27,11 +28,9 @@ from Camera import Camera
 
 
 
-def floored_to(x, n):
-    return n*math.floor(x/n)
-
 @dataclass
 class PointMemory:
+    """erm some docstring"""
 
     ref: Square
     max_id: tuple[int, int]
@@ -40,13 +39,15 @@ class PointMemory:
 
     @dataclass
     class Cell:
+        """Placeholder for memory cells"""
         x: int
         y: int
-        previous_rgb: rgb_type
-        rgb: rgb_type
+        previous_rgb: RgbType
+        rgb: RgbType
         action_value: int = 0
 
         def get_info(self):
+            """get its info duh"""
             return self.x, self.y, self.previous_rgb, self.rgb, self.action_value
 
     def __post_init__(self):
@@ -54,12 +55,15 @@ class PointMemory:
         self.memory_step: int = -1
 
     def reinit(self):
+        """Wipe the memory"""
         self.memory = []
         self.memory_step = -1
 
     #debuggers ---------------------------
     @staticmethod
     def memo_debug(func: Callable[..., ...]):
+        """Debugger for memory variables"""
+
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
             print(f"Executing {func.__name__} ------------------------\nStats BEFORE execution:")
@@ -74,6 +78,7 @@ class PointMemory:
 
     @staticmethod
     def depth_crop(func: Callable[..., ...]):
+        """If memory too large, wipes the furthest elements"""
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
             res = func(self, *args, **kwargs)
@@ -85,30 +90,28 @@ class PointMemory:
         return wrapper
 
     @property
-    def memory_integrity(self):
-        return self.memory_step > -1 and len(self.memory) > 0
-
-    @property
     def memory_size(self):
+        """Get the memory size"""
         return len(self.memory)
 
-    def memo_update(self, x: int, y: int, rgb: rgb_type):
+    def memo_update(self, x: int, y: int, rgb: RgbType):
+        """Update the memory (repeats in for several methods)"""
         diff = self.memory_size - self.memory_step - 1
         if diff > 0:
             self.memory = self.memory[:-diff]
         self.memory_step += 1
         self.memory.append(self.Cell(x, y, self.ref.get_pixel_rgb((x, y)), rgb))
 
-
     @depth_crop
-    def edit_point(self, x: int, y: int, rgb: rgb_type) -> None:
+    def edit_point(self, x: int, y: int, rgb: RgbType) -> None:
+        """Edits the pixel directly on the SquareMap"""
         if 0 <= x < self.max_id[0] and 0 <= y < self.max_id[1]:
             self.memo_update(x, y, rgb)
             self.ref.set_pixel((x, y), rgb)
 
-
     @depth_crop
     def previous(self):
+        """Return to previous action like ctrl z"""
         if self.memory_step > 0:
             c = self.memory[self.memory_step].get_info()
             self.memory_step -= 1
@@ -117,6 +120,7 @@ class PointMemory:
 
     @depth_crop
     def next(self):
+        """Return to next action like ctrl shift z"""
         diff = self.memory_size - self.memory_step - 1
         if diff > 0:
             self.memory_step += 1
@@ -255,7 +259,7 @@ def main():
         draw_square(x_id, y_id, drawing_color)
 
     #draw lines instead of points (better draw)
-    def tangent_drawing(x, y, dx, dy, rgb: rgb_type):
+    def tangent_drawing(x, y, dx, dy, rgb: RgbType):
         x1, y1 = mouse_pos_viewport_transform(x - dx, y - dy)
         x2, y2 = mouse_pos_viewport_transform(x, y)
         x1_id, y1_id = find_mouse_id(x1, y1)
