@@ -145,6 +145,7 @@ class DrawingModule:
     map_base_size: float = 5.0
 
     def __post_init__(self):
+
         self.cam = Camera((1000, 1000))
         self.cam.debug_ui()
 

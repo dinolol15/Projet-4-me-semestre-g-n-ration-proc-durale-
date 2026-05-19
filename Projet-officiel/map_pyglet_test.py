@@ -22,7 +22,7 @@ def on_key_press(symbol, modifier):
         print("A was pressed")
         a = input("choix ")
         if a == "1":
-            tilemap = Carte.w_f_c_simplified(mm.create_matrix((100, 100),
+            tilemap = Carte.w_f_c_simplified(mm.create_matrix((50, 50),
                                                               {Carte.Water: 1, Carte.Coast: 2}, ))
         else:
             tilemap = Carte.w_f_c_evolved(
