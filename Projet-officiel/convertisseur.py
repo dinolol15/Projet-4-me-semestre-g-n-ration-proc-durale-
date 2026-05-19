@@ -6,6 +6,7 @@ Auteur: Adrien Buschbeck, Albert Stanislawek
 
 from itertools import product
 
+
 def convertisseur(matrix: list[list[tuple[int, int, int]]]) -> bytes:
     """
     Convertit une matrice de tile en une matrice de bytes
@@ -34,10 +35,16 @@ def convertisseur_tryhard(matrix: list[list[tuple[int, int, int]]]) -> bytes:
     """
 
     return b"".join(
-        [b"".join([i.to_bytes(length=1, byteorder="big") for i in matrix[y][x] + (255,)])
-         for x, y in product(range(len(matrix)), range(len(matrix[0])))]
+        [
+            b"".join(
+                [
+                    i.to_bytes(length=1, byteorder="big")
+                    for i in matrix[y][x] + (255,)
+                ]
+            )
+            for x, y in product(range(len(matrix)), range(len(matrix[0])))
+        ]
     )
-
 
 
 if __name__ == "__main__":
