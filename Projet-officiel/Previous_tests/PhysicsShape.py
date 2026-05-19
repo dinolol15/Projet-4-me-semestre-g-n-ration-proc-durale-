@@ -1,7 +1,7 @@
 
 
 from typing import TYPE_CHECKING
-#same story as ImageDisplay.py
+#same story as image_display.py
 if TYPE_CHECKING:
     from Camera import Camera
 
