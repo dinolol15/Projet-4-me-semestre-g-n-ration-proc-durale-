@@ -18,14 +18,14 @@ def on_key_press(symbol, modifier):
         print("A was pressed")
         a = input("choix ")
         if a == "1":
-            tilemap = Carte.w_f_c_simplified(mm.create_matrix((100, 100),
+            tilemap = Carte.w_f_c_simplified(mm.create_matrix((50, 50),
                                                               {Carte.Water: 1, Carte.Coast: 2}, )
                                              )
         
         else:
-            tilemap = Carte.w_f_c_evolved(mm.create_matrix((100, 100),
+            tilemap = Carte.w_f_c_evolved(mm.create_matrix((50, 50),
                                                            {"baba": 2}),
-                                          10, [20, 3, Carte.Water], 6)
+                                          6, [10, 3, Carte.Water], 10)
         print(tilemap)
         for i in range(len(tilemap)):
             for j in range(len(tilemap[1])):

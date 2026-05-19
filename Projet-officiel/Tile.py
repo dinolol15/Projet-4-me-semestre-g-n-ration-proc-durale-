@@ -24,9 +24,7 @@ class Tile:
     )
     wfc_delete: list["Tile"] = dc.field(
         default_factory=list["Tile"]
-    )  # not hashable, to do with enum and namedtuple
-    # wealth: float will add if time and if Albert
-    # wildness: float will add if time and if Albert
+    )
 
     def __repr__(self):
         return self.Name[0]
