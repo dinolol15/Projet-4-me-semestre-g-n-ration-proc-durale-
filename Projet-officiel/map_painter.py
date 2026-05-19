@@ -20,7 +20,7 @@ from pyglet.window import key
 import some_tkinter as SomeTK
 from square_map import SquareMap as Square
 from image_display import ImageDisplay as Image
-from Camera import Camera
+from camera import Camera
 
 
 type RgbType = tuple[int, int, int]
@@ -179,11 +179,11 @@ class DrawingModule:
             layer=0,
             centered=False,
             size=.1,
-            zoom_scaling=False,
-            position_scaling=False
         )
+        self.mouse_pointer.position_scaling = False
+        self.mouse_pointer.zoom_scaling = False
         self.mouse_pointer.import_image("pen_icon.png", "Icons")
-        self.cam.window_UI_dynamic.append(self.mouse_pointer)
+        self.cam.window_ui_dynamic.append(self.mouse_pointer)
 
         # icons on the side with some fixed values
         self.toolbar_range = (450, 800)
@@ -193,39 +193,32 @@ class DrawingModule:
             50,
             self.toolbar_range[1] - self.toolbar_range[0],
             color=(255, 255, 255),
-            batch=self.cam.batch_UI
+            batch=self.cam.batch_ui
         )
-        self.cam.window_UI_static.append(tools_back)
+        self.cam.window_ui_static.append(tools_back)
 
         # this single line above is for the only purpose of avoiding a pylint error
-        pen_tool_icon = Image(self.cam, "UI", 2, position=(5, 755), centered=False, size=0.1,
-                              position_scaling=False, zoom_scaling=False)
+        pen_tool_icon = Image(self.cam, "UI", 2, position=(5, 755), centered=False, size=0.1)
         pen_tool_icon.import_image("pen_icon.png", "Icons")
-        self.cam.window_UI_dynamic.append(pen_tool_icon)
-        eraser_tool_icon = Image(self.cam, "UI", 2, position=(5, 705), centered=False, size=0.1,
-                                 position_scaling=False, zoom_scaling=False)
+        self.cam.window_ui_dynamic.append(pen_tool_icon)
+        eraser_tool_icon = Image(self.cam, "UI", 2, position=(5, 705), centered=False, size=0.1)
         eraser_tool_icon.import_image("eraser_icon.png", "Icons")
-        self.cam.window_UI_dynamic.append(eraser_tool_icon)
-        save_tool_icon = Image(self.cam, "UI", 2, position=(5, 655), centered=False, size=0.1,
-                               position_scaling=False, zoom_scaling=False)
+        self.cam.window_ui_dynamic.append(eraser_tool_icon)
+        save_tool_icon = Image(self.cam, "UI", 2, position=(5, 655), centered=False, size=0.1)
         save_tool_icon.import_image("save_icon.png", "Icons")
-        self.cam.window_UI_dynamic.append(save_tool_icon)
-        import_tool_icon = Image(self.cam, "UI", 2, position=(2, 605), centered=False, size=0.1,
-                                 position_scaling=False, zoom_scaling=False)
+        self.cam.window_ui_dynamic.append(save_tool_icon)
+        import_tool_icon = Image(self.cam, "UI", 2, position=(2, 605), centered=False, size=0.1)
         import_tool_icon.import_image("import_icon.png", "Icons")
-        self.cam.window_UI_dynamic.append(import_tool_icon)
-        draw_options_icon = Image(self.cam, "UI", 2, position=(5, 555), centered=False, size=0.1,
-                                  position_scaling=False, zoom_scaling=False)
+        self.cam.window_ui_dynamic.append(import_tool_icon)
+        draw_options_icon = Image(self.cam, "UI", 2, position=(5, 555), centered=False, size=0.1)
         draw_options_icon.import_image("draw_options_icon.png", "Icons")
-        self.cam.window_UI_dynamic.append(draw_options_icon)
-        generate_map_icon = Image(self.cam, "UI", 2, position=(2, 505), centered=False, size=0.14,
-                                  position_scaling=False, zoom_scaling=False)
+        self.cam.window_ui_dynamic.append(draw_options_icon)
+        generate_map_icon = Image(self.cam, "UI", 2, position=(2, 505), centered=False, size=0.14)
         generate_map_icon.import_image("generate_icon.png", "Icons")
-        self.cam.window_UI_dynamic.append(generate_map_icon)
-        help_icon = Image(self.cam, "UI", 2, position=(13, 455), centered=False, size=0.1,
-                          position_scaling=False, zoom_scaling=False)
+        self.cam.window_ui_dynamic.append(generate_map_icon)
+        help_icon = Image(self.cam, "UI", 2, position=(13, 455), centered=False, size=0.1)
         help_icon.import_image("help_icon.png", "Icons")
-        self.cam.window_UI_dynamic.append(help_icon)
+        self.cam.window_ui_dynamic.append(help_icon)
         self.sidebar_icons = [
             pen_tool_icon,
             eraser_tool_icon,
@@ -235,6 +228,9 @@ class DrawingModule:
             generate_map_icon,
             help_icon
         ]
+        for ob in self.sidebar_icons:
+            ob.zoom_scaling = False
+            ob.position_scaling = False
 
         # red pointer for selected tool
         self.tool_pointer = pyglet.shapes.Rectangle(
@@ -243,7 +239,7 @@ class DrawingModule:
             50,
             50,
             (255, 0, 0),
-            batch=self.cam.batch_UI
+            batch=self.cam.batch_ui
         )
         self.cam.add_to_layer(self.tool_pointer, 1)
 
@@ -260,7 +256,7 @@ class DrawingModule:
             self.tool_pointer,
             self.cam, tool_pointer_update
         )
-        self.cam.window_UI_dynamic.append(tool_pointer_wrap)
+        self.cam.window_ui_dynamic.append(tool_pointer_wrap)
 
         #memory module
         self.memo = PointMemory(self.square, self.map_size)

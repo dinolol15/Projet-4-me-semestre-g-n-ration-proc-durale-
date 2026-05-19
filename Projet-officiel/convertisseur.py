@@ -9,8 +9,8 @@ from itertools import product
 def convertisseur(matrix: list[list[tuple[int, int, int]]]) -> bytes:
     """
     Convertit une matrice de tile en une matrice de bytes
-    Au vu du fait que Adrien est en train de faire le typage, j'ai mis le truc du haut au lieu de Matrix car y a des
-    bugs dans son truc
+    Au vu du fait que Adrien est en train de faire le typage,
+    j'ai mis le truc du haut au lieu de Matrix car y a des bugs dans son truc
     """
 
     dim_x = len(matrix)

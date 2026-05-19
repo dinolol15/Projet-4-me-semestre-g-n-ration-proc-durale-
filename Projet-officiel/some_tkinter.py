@@ -1,34 +1,31 @@
 
 """
-Tkinter stuff for popups and saving files
-by Albert S
-
-From top to bottom you may see a whole adventure of me discovering different method of yielding results while handling
-tkinter widows at the same time
+Tkinter stuff for popups and saving files by Albert S
+From top to bottom you may see a whole adventure of me discovering different methods
+of yielding results while handling tkinter widows at the same time
 """
 
 
 import tkinter as tk
 from tkinter import messagebox, Frame
 from tkinter import ttk
-
+import os
 from collections.abc import Callable
 
+#savedata
 import savedata as sd
-import os
-
 #adrien things
-import Carte
+import carte as Carte
 import matrix_manager as mm
+import convertisseur as cnv
 
-import Convertisseur as cnv
 
-
-#a simple reinitalization window
 def reinit(exe: Callable):
+    """Simple reinitalization warning window"""
     print("reinitialize")
     ttl = "WARNING: USE YOUR BRAIN AND READ THIS"
-    msg = """You're either about to do something stupid or willingfully reinitialize your masterpiece. Are you sure you want to proceed?"""
+    msg = "You're either about to do something stupid or willingly reinitialize your masterpiece."
+    msg += " Are you sure you want to proceed?"
     response = messagebox.askyesno(ttl, msg, icon="warning")
     if response:
         exe()
@@ -38,15 +35,15 @@ def reinit(exe: Callable):
 
 
 
-TEXT_DESC = "Congrats on your brand new project! You can copy the data of your map with the following button:"
+text_desc = "Congrats on your brand new project! "
+text_desc += "You can copy the data of your map with the following button:"
 
-"""
-Feat. Gemini AI, I'm sorry Adrian but I had to be efficient
-That being said, that wasn't vibe code, just that I copied the snippets of code like a blueprint of a button to keep a
-consistent design of windows
-"""
+
 def copy_win(copy_text: bytes, dim: tuple[int, int]):
-
+    """Feat. Gemini AI, I'm sorry Adrien, but I had to be efficient
+    That being said, that wasn't vibe code, just that I copied the snippets of
+    code like a blueprint of a button to keep a
+    consistent design of windows"""
     #if text too long to be on the screen
     show_text = str(copy_text)
     if len(show_text) > 50:
@@ -70,7 +67,7 @@ def copy_win(copy_text: bytes, dim: tuple[int, int]):
     popup.protocol("WM_DELETE_WINDOW", on_popup_close)
 
     #labels with copy text and description
-    label = tk.Label(popup, text=TEXT_DESC, font=("Arial", 10), wraplength=300)
+    label = tk.Label(popup, text=text_desc, font=("Arial", 10), wraplength=300)
     label.pack(pady=(30, 5))
 
     border_frame = tk.Frame(popup, bg="black")
@@ -86,7 +83,6 @@ def copy_win(copy_text: bytes, dim: tuple[int, int]):
     writing.pack(padx=30)
 
     def copy_action():
-        text_to_copy = label["text"]
         root.clipboard_clear()
         root.clipboard_append(str(copy_text))
 
@@ -95,10 +91,8 @@ def copy_win(copy_text: bytes, dim: tuple[int, int]):
 
     #function to save the said file inside a folder to read it later
     def save_file_action():
-        main = "Projet-officiel"
         save_path = "Save_files"
 
-        full_save_path = os.path.join(main, save_path)
         if not os.path.exists(save_path):
             os.mkdir(save_path)
         file_name = writing.get()
@@ -107,9 +101,11 @@ def copy_win(copy_text: bytes, dim: tuple[int, int]):
         #button color change
         def ui_feedback(mode: int = 0):
             if mode == 0:
-                save_file_button.config(text=f"File not saved...", bg="#4CAF50", fg="white", state="normal")
+                save_file_button.config(
+                    text="File not saved...", bg="#4CAF50", fg="white", state="normal")
             else:
-                save_file_button.config(text=f"Saved {file_name}!", bg="#4CAF50", fg="white", state="disabled")
+                save_file_button.config(
+                    text=f"Saved {file_name}!", bg="#4CAF50", fg="white", state="disabled")
 
         def write_file():
             respp = messagebox.askyesno("SAVING", "You sure you wanna save your file?")
@@ -161,7 +157,8 @@ def copy_win(copy_text: bytes, dim: tuple[int, int]):
 
 
 def import_project(getter: list):
-    """getter needed as something to 'send' the result while bypassing the mess of tkinter windows closing"""
+    """getter needed as something to 'send' the result
+    while bypassing the mess of tkinter windows closing"""
 
     root = tk.Tk()
     root.title("Main Application")
@@ -177,8 +174,8 @@ def import_project(getter: list):
         #destroying popup closes the root and exits the application
         root.destroy()
     popup.protocol("WM_DELETE_WINDOW", on_popup_close)
-
-    label = tk.Label(popup, text="Select the project to import:", font=("Arial", 10), wraplength=300)
+    label = tk.Label(
+        popup, text="Select the project to import:", font=("Arial", 10), wraplength=300)
     label.pack(pady=(30, 5))
 
     #list all saves in the directory + their paths
@@ -192,13 +189,12 @@ def import_project(getter: list):
             full_path = os.path.join(save_path, filename)
             if os.path.isfile(full_path) and sd.istype(full_path):
                 save_files[filename] = full_path
-        if not len(save_files) == 0:
+        if len(save_files) != 0:
             return save_files
-        else:
-            return {}
+        return {}
 
     saves = get_save_files() # ["file1", "file2", "file3"]
-    choices = [i for i in saves.keys()]
+    choices = list(saves.keys())
 
     #the dropdown
     dropdown = ttk.Combobox(popup, values=choices, state="readonly", font=("Arial", 10))
@@ -208,7 +204,8 @@ def import_project(getter: list):
     def import_action():
         select = dropdown.get()
         if select == "Your save...":
-            import_button.config(text=f"Select something please", bg="red", fg="white", state="normal")
+            import_button.config(
+                text="Select something please", bg="red", fg="white", state="normal")
         else:
             path = saves[select]
             file, dim = sd.read_file(path)
@@ -231,8 +228,8 @@ def import_project(getter: list):
     root.mainloop()
 
 
-#pen settings tk interface
 def drawing_settings():
+    """Pen settings tk interface"""
     chosen_tile = ["#000000"]
     drawing_size = [1]
 
@@ -253,9 +250,9 @@ def drawing_settings():
 
     selection_var = tk.StringVar(value="Blue Theme")
 
-    blue = "#{:02x}{:02x}{:02x}".format(*(70, 130, 180))
-    yellow = "#{:02x}{:02x}{:02x}".format(*(237, 201, 175))
-    green = "#{:02x}{:02x}{:02x}".format(*(34, 139, 34))
+    blue = f"#{70:02x}{130:02x}{180:02x}"
+    yellow = f"#{237:02x}{201:02x}{175:02x}"
+    green = f"#{34:02x}{139:02x}{34:02x}"
 
     options = [
         ("Water", blue),
@@ -335,33 +332,50 @@ def drawing_settings():
     return rgb_tuple, final_draw_size
 
 
-global map_data#will be returned later
 
 def create_new_map() -> tuple[int, int, bytes]:
-
-    root = tk.Tk()
-    root.title("Generate new map")
-    root.geometry("500x350")
-
-    label = tk.Label(root, text="Select your settings to create a new map:", font=("Arial", 10), wraplength=300)
-    label.pack(pady=(30, 5))
-
-    dimension_frame = tk.Frame(root)
-    dimension_frame.pack(padx=10)
-
-    dim_l_x = tk.Label(dimension_frame, text="XY dimension (square):", font=("Arial", 11), wraplength=300)
+    """Map generator feat. dinolol15 aka Adrien"""
 
     #for entries, check if digit typed, if not then do not place character
     def validate_integer(action, value_if_allowed):
         if action == '1':
             if value_if_allowed.isdigit() or value_if_allowed == "":
                 return True
-            else:
-                return False
+            return False
         return True
 
-    vcmd = (root.register(validate_integer), '%d', '%P')
+    # in here is the summary of all my guesswork about
+    # what all the arguments in Adrien's masterpiece mean
+    def on_close():
+        mtx = mm.create_matrix((int(dim_e_x.get()), int(dim_e_x.get())), {"baba": 2})
+        wpv = int(waterpval_slider.get())
+        rw = [int(rw_e1.get()), int(rw_e2.get()), Carte.Water]
+        hmdt = int(wet_slider.get())
 
+        # matrix, river points, random walk list, humidity
+        mdd = Carte.w_f_c_evolved(mtx, wpv, rw, hmdt)  # some typing problems here...
+        map_data.append(mdd)
+        root.destroy()
+
+    root = tk.Tk()
+    root.title("Generate new map")
+    root.geometry("500x350")
+    map_data = []
+
+    label = tk.Label(
+        root,
+        text="Select your settings to create a new map:",
+        font=("Arial", 10),
+        wraplength=300)
+    label.pack(pady=(30, 5))
+
+    dimension_frame = tk.Frame(root)
+    dimension_frame.pack(padx=10)
+
+    dim_l_x = tk.Label(
+        dimension_frame, text="XY dimension (square):", font=("Arial", 11), wraplength=300)
+
+    vcmd = (root.register(validate_integer), '%d', '%P')
     #dimensions
     dim_e_x = tk.Entry(dimension_frame, width=30, validate='key', validatecommand=vcmd)
     dim_e_x.insert(0, "100")
@@ -382,7 +396,6 @@ def create_new_map() -> tuple[int, int, bytes]:
         from_=1,
         to=10,
         orient="horizontal",
-        command=None,
         length=200
     )
 
@@ -394,14 +407,14 @@ def create_new_map() -> tuple[int, int, bytes]:
     frame2.pack(pady=10)
 
     #n rivers start points
-    waterpval_label = tk.Label(frame2, text="Number of rivers:  ", font=("Arial", 11), wraplength=300)
+    waterpval_label = tk.Label(
+        frame2, text="Number of rivers:  ", font=("Arial", 11), wraplength=300)
 
     waterpval_slider = tk.Scale(
         frame2,
         from_=1,
         to=20,
         orient="horizontal",
-        command=None,
         length=200
     )
     waterpval_slider.set(5)
@@ -419,32 +432,16 @@ def create_new_map() -> tuple[int, int, bytes]:
     rw_e2 = tk.Entry(frame3, width=10, validate='key', validatecommand=vcmd)
     rw_e2.insert(0, "3")
 
-    rw_tiles: dict = {
-        "Water": Carte.Water,
-        "Ground": Carte.Ground,
-        "Coast": Carte.Coast,
-    }
     rw_tiles_choices = ["Water", "Ground", "Coast"]
 
-    rw_tile_dropdown = ttk.Combobox(frame3, values=rw_tiles_choices, state="readonly", font=("Arial", 10), width=10)
+    rw_tile_dropdown = ttk.Combobox(
+        frame3, values=rw_tiles_choices, state="readonly", font=("Arial", 10), width=10)
     rw_tile_dropdown.set("Water")
 
     rw_label.grid(row=0, column=0)
     rw_e1.grid(row=0, column=1)
     rw_e2.grid(row=0, column=2)
     rw_tile_dropdown.grid(row=0, column=3)
-
-    #in here is the summary of all my guesswork about what all the arguments in Adrien's masterpiece mean
-    def on_close():
-        global map_data
-        mtx = mm.create_matrix((int(dim_e_x.get()), int(dim_e_x.get())),{"baba": 2})
-        wpv = int(waterpval_slider.get())
-        rw = [int(rw_e1.get()), int(rw_e2.get()), Carte.Water]
-        hmdt = int(wet_slider.get())
-
-        #matrix, river points, random walk list, humidity
-        map_data = Carte.w_f_c_evolved(mtx, wpv, rw, hmdt) #some typing problems here...
-        root.destroy()
 
     generate_button = tk.Button(
         root,
@@ -459,18 +456,18 @@ def create_new_map() -> tuple[int, int, bytes]:
 
     root.mainloop()
     #after that is the returning part
-
-    #this converts the gotten map into bytes that can be directly put into a SquareMap
-    global map_data
-    try:
-        map_data_colors = []
-        for y in map_data:
-            cc = []
-            for x in y:
-                cc.append(x.Color)
-            map_data_colors.append(cc)
-        map_data_bytes = cnv.convertisseur_tryhard(map_data_colors)
-        return len(map_data[0]), len(map_data), map_data_bytes
-    except: #no idea what error it yields, sometimes it does that's for sure
-        return 0, 0, b""
-
+    def end_conversion(md: list):
+        #this converts the gotten map into bytes that can be directly put into a SquareMap
+        mdd = md[0]
+        try:
+            map_data_colors = []
+            for y in mdd:
+                cc = []
+                for x in y:
+                    cc.append(x.Color)
+                map_data_colors.append(cc)
+            map_data_bytes = cnv.convertisseur_tryhard(map_data_colors)
+            return len(mdd[0]), len(mdd), map_data_bytes
+        except: #no idea what error it yields, sometimes it does that's for sure
+            return 0, 0, b""
+    return end_conversion(map_data)

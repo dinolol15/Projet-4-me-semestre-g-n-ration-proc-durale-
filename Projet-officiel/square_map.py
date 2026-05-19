@@ -4,19 +4,24 @@ The ultimate GOATesque map
 MxN pixels inside an image with removed snap to create a fast tiled map
 
 """
-import pyglet
-from image_display import ImageDisplay
+
+#1. standard lib
 import random
-from typing import Literal
-from typing import TYPE_CHECKING
+from typing import Literal, TYPE_CHECKING
+
+#3rd party
+import pyglet
+
+#local lib
+from image_display import ImageDisplay
 if TYPE_CHECKING:
-    from Camera import Camera
+    from camera import Camera
 
 
 #inherits image displayer
 class SquareMap(ImageDisplay):
     """Ultimate genius: uses ImageDisplay to display the map made of pixels"""
-
+    # too many attributes but I cant help it
     def __init__(self,
                  camera: "Camera",
                  batch: Literal["UI", "game"],
@@ -25,7 +30,6 @@ class SquareMap(ImageDisplay):
                  #define parameters for the map itself
                  map_dimensions: tuple[int, int] = (0, 0),
                  map_pixel_size: int = 4,
-                 map_pixel_format: str = "RGBA",
 
                  #better to have some factory settings for simplicity, still flexible
                  position: tuple[int, int] = (0, 0),
@@ -43,7 +47,7 @@ class SquareMap(ImageDisplay):
         self.dim_y = map_dimensions[1]
 
         self.pixel_size = map_pixel_size
-        self.pixel_format = map_pixel_format
+        self.pixel_format: str = "RGBA"
 
         #set image data
         self.pixel_array: bytearray = bytearray(self.dim_x * self.dim_y * len(self.pixel_format))

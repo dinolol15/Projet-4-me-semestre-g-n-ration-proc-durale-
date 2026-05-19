@@ -6,7 +6,7 @@ from typing import Literal
 from typing import TYPE_CHECKING
 #same story as image_display.py
 if TYPE_CHECKING:
-    from Camera import Camera
+    from camera import Camera
 
 class PhysicsObject(ImageDisplay):
 

@@ -8,7 +8,7 @@ from collections import Counter
 import random as ran
 import matrix_manager as mm
 from matrix_manager import Position, Matrix, set, get
-from Tile import Tile, placeholder
+from tile import Tile, placeholder
 
 # obligatoire pour les deux algorithmes
 Water = Tile("Water", (70, 130, 180), [])  # (1, 1,)
