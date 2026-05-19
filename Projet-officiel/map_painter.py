@@ -31,7 +31,7 @@ type RgbType = tuple[int, int, int]
 
 @dataclass
 class PointMemory:
-    """erm some docstring"""
+    """Memory of drawing"""
 
     ref: Square
     max_id: tuple[int, int]
@@ -187,7 +187,7 @@ class DrawingModule:
         self.cam.window_ui_dynamic.append(self.mouse_pointer)
 
         # icons on the side with some fixed values
-        self.toolbar_range = (450, 800)
+        self.toolbar_range = (500, 800)
         tools_back = pyglet.shapes.Rectangle(
             0,
             self.toolbar_range[0],
@@ -217,9 +217,6 @@ class DrawingModule:
         generate_map_icon = Image(self.cam, "UI", 2, position=(2, 505), centered=False, size=0.14)
         generate_map_icon.import_image("generate_icon.png", "Icons")
         self.cam.window_ui_dynamic.append(generate_map_icon)
-        help_icon = Image(self.cam, "UI", 2, position=(13, 455), centered=False, size=0.1)
-        help_icon.import_image("help_icon.png", "Icons")
-        self.cam.window_ui_dynamic.append(help_icon)
         self.sidebar_icons = [
             pen_tool_icon,
             eraser_tool_icon,
@@ -227,7 +224,6 @@ class DrawingModule:
             import_tool_icon,
             draw_options_icon,
             generate_map_icon,
-            help_icon
         ]
         for ob in self.sidebar_icons:
             ob.zoom_scaling = False
