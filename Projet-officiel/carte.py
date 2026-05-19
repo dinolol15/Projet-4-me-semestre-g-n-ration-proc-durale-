@@ -169,7 +169,7 @@ def condition(matrix: Matrix[dict[Tile, int] | Tile], position: Position):
         value_cell: int = value_tested_cell.get(cell, 0)
         if value_cell > 0:
             new_dict = dict(value_tested_cell)
-            new_dict[cell] += 20
+            new_dict[cell] += 50
             matrix[pos_tested_cell[0]][pos_tested_cell[1]] = new_dict
 
 
